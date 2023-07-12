@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public float speed;
     private float _inputX;
     private float _inputY;
-
+    
     private Vector2 _moveInput;
     private void Awake()
     {
