@@ -27,7 +27,7 @@ public enum PartName
 
 public enum Season
 {
-    春天, 夏天, 秋天, 冬天
+    Spring, Summer, Autumn, Winter
 }
 
 public enum GridType

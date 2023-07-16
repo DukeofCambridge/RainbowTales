@@ -71,8 +71,8 @@ MonoBehaviour:
     canPickedup: 1
     canDropped: 0
     canCarried: 1
-    itemPrice: 0
-    sellPercentage: 0
+    itemPrice: 10
+    sellPercentage: 0.5
   - itemID: 2002
     itemName: "\u84DD\u8393\u79CD\u5B50"
     itemType: 0

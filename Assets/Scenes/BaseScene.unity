@@ -515,6 +515,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &709061267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 709061269}
+  - component: {fileID: 709061268}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &709061268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709061267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd1f19334b157424ba85614caa30f240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 4606077041444169308, guid: a64238f546102c447b226571ec74714a, type: 3}
+--- !u!4 &709061269
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709061267}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.145653, y: -1.0913906, z: -3.1482785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &945101324
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +574,7 @@ GameObject:
   - component: {fileID: 945101328}
   - component: {fileID: 945101329}
   - component: {fileID: 945101330}
+  - component: {fileID: 945101331}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -638,6 +684,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff3c13c803e7b33489209cb9049d1915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &945101331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945101324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b443a3ee635fb4748b52d352f5947ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1036932398
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,6 +757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDataListSo: {fileID: 11400000, guid: 6f0b2ae0defd4b94cbe4383c4516070c, type: 2}
+  playerBag: {fileID: 11400000, guid: 2a827559e11a2674880ba381634050de, type: 2}
 --- !u!4 &1277999977
 Transform:
   m_ObjectHideFlags: 0
