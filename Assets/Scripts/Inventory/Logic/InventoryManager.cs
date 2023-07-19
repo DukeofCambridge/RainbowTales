@@ -33,10 +33,7 @@ namespace Rainbow.Inventory
         {
             int index = GetItemIndexInBag(item.itemID);
             AddItemAtIndex(item.itemID, index, 1);
-            InventoryItem inventoryItem = new InventoryItem();
-            inventoryItem.itemID = item.itemID;
-            inventoryItem.itemAmount = 1;
-            playerBag.itemsofInventory[0] = inventoryItem;
+
             //Debug.Log(GetItemDetails(item.itemID).itemID + "Name: " + GetItemDetails(item.itemID).itemName);
             if (toDestory)
             {
@@ -109,6 +106,7 @@ namespace Rainbow.Inventory
         /// <param name="targetIndex"></param>
         public void SwapItem(int fromIndex, int targetIndex)
         {
+            //in fact the two pointers exchange the position they point to in memory space, not exchange the two memory areas
             InventoryItem currentItem = playerBag.itemsofInventory[fromIndex];
             InventoryItem targetItem = playerBag.itemsofInventory[targetIndex];
             if (targetItem.itemID != 0)
@@ -118,8 +116,8 @@ namespace Rainbow.Inventory
             }
             else
             {
-                playerBag.itemsofInventory[fromIndex] = new InventoryItem();
                 playerBag.itemsofInventory[targetIndex] = currentItem;
+                playerBag.itemsofInventory[fromIndex] = new InventoryItem();
             }
 
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);

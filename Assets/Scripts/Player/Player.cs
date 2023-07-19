@@ -30,12 +30,19 @@ public class Player : MonoBehaviour
         {
             PlayerControl();
         }
+        else
+        {
+            _isMoving = false;
+        }
         SwitchAnimation();
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (!_isDisabled)
+        {
+            Move();
+        }
     }
 
     private void OnEnable()

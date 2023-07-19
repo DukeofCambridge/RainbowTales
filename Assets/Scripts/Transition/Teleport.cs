@@ -7,6 +7,7 @@ namespace Rainbow.Transition
 {
     public class Teleport : MonoBehaviour
     {
+        [SceneName]
         public string targetScene;
         public Vector3 targetPos;
 
