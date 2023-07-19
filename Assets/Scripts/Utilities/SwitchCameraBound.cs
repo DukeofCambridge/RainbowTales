@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class SwitchCameraBound : MonoBehaviour
 {
-    private void Start()
+    private void OnEnable()
     {
-        SwitchConfinerShape();
+        EventHandler.AfterSceneLoadedEvent += SwitchConfinerShape;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadedEvent -= SwitchConfinerShape;
     }
 
     private void SwitchConfinerShape()

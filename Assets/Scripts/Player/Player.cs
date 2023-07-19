@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     private Animator[] _animators;
     private bool _isMoving;
     private bool _isRunning = true;
+    private bool _isDisabled;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -25,13 +26,45 @@ public class Player : MonoBehaviour
     private void Update()
     {
         SwitchMoveMode();
-        PlayerControl();
+        if (!_isDisabled)
+        {
+            PlayerControl();
+        }
         SwitchAnimation();
     }
 
     private void FixedUpdate()
     {
         Move();
+    }
+
+    private void OnEnable()
+    {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.MoveToPosition += OnMoveToPosition;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.MoveToPosition -= OnMoveToPosition;
+    }
+
+    private void OnMoveToPosition(Vector3 obj)
+    {
+        transform.position = obj;
+    }
+
+    private void OnAfterSceneLoadedEvent()
+    {
+        _isDisabled = false;
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        _isDisabled = true;
     }
 
     private void PlayerControl()

@@ -26,11 +26,26 @@ public class AnimController : MonoBehaviour
     private void OnEnable()
     {
         EventHandler.ItemSelectedEvent += OnItemSelectedEvent;
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.ItemSelectedEvent -= OnItemSelectedEvent;
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        holdItem.enabled = false;
+        SwitchAnimator(PartType.None);
+    }
+
+    private void OnAfterSceneLoadedEvent()
+    {
+        
     }
 
     private void OnItemSelectedEvent(ItemDetails itemDetails, bool isSelected)
