@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tool_Hoe
+  m_Controller: {fileID: 9100000, guid: b28011e3c903ce74f858fb0912859303, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: e306d7a2617584eadbb2be3989b403c4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1cf8683d5c59c44eabeb7b551b5f6515, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fbec88715095149bc8fb3ebed8dec66b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0c2b68c325e334d159e211c813c1eb9c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 70a649e5ec959444684107c528f21702, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e706fa3ab17ef4e60900d5c8b04a9847, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 50dba9204387f4663a7ebbfbd94d5878, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b4f054c9c742842f0915e49ba3bfe108, type: 2}

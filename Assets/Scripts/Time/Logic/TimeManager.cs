@@ -19,7 +19,7 @@ public class TimeManager : MonoBehaviour
 
     private void Start()  //Start() is called after OnEnable()
     {
-        EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour);
     }
 
@@ -104,8 +104,9 @@ public class TimeManager : MonoBehaviour
                             }
                         }
                     }
+                    EventHandler.CallGameDayEvent(gameDay, gameSeason);
                 }
-                EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+                EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
             EventHandler.CallGameMinuteEvent(gameMinute, gameHour);
         }

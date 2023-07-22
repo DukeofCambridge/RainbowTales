@@ -29,20 +29,20 @@ public class TimeUI : MonoBehaviour
     private void OnEnable()
     {
         EventHandler.GameMinuteEvent += OnGameMinuteEvent;
-        EventHandler.GameDateEvent += OnGameDateEvent;
+        EventHandler.GameHourEvent += OnGameHourEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.GameMinuteEvent -= OnGameMinuteEvent;
-        EventHandler.GameDateEvent -= OnGameDateEvent;
+        EventHandler.GameHourEvent -= OnGameHourEvent;
     }
     private void OnGameMinuteEvent(int minute, int hour)
     {
         timeText.text = hour.ToString("00") + ":" + minute.ToString("00");
     }
 
-    private void OnGameDateEvent(int hour, int day, int month, int year, Season season)
+    private void OnGameHourEvent(int hour, int day, int month, int year, Season season)
     {
         dateText.text = year + "年" + month.ToString("00") + "月" + day.ToString("00") + "日";
         seasonImage.sprite = seasonSprites[(int)season];

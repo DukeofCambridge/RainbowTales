@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class AnimController : MonoBehaviour
 {
-    private Animator[] animators;
+    private Animator[] animators;  //animators in children gameobject
 
     public SpriteRenderer holdItem;
 
     [Header("各部分动画列表")]
-    public List<AnimatorType> animatorTypes;
+    public List<AnimatorType> animatorTypes;   //all possible animators
 
-    private Dictionary<string, Animator> animatorNameDict = new Dictionary<string, Animator>();
+    private Dictionary<string, Animator> animatorNameDict = new Dictionary<string, Animator>(); //key:part type; value:override animator
 
     private void Awake()
     {
@@ -55,6 +55,8 @@ public class AnimController : MonoBehaviour
         {
             ItemType.Seed => PartType.Carry,
             ItemType.Commodity => PartType.Carry,
+            ItemType.Hoe=>PartType.Hoe,
+            ItemType.WaterTool=>PartType.Water,
             _ => PartType.None
         };
 

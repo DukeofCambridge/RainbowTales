@@ -19,8 +19,10 @@ namespace Rainbow.Map
 
         private Tilemap _waterTilemap;
         private Tilemap _digTilemap;
-        //场景名字+坐标和对应的瓦片信息
-        private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
+
+        private Season _currentSeason;
+        
+        private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>(); //key:scene name+coordinate; value:tile details 
         private Grid _currentGrid;
 
         private void Start()
@@ -35,12 +37,45 @@ namespace Rainbow.Map
         {
             EventHandler.ExecuteActionAfterAnimation += OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent += OnGameDayEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.ExecuteActionAfterAnimation -= OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent -= OnGameDayEvent;
+        }
+
+        /// <summary>
+        /// refresh map every day
+        /// </summary>
+        /// <param name="day"></param>
+        /// <param name="season"></param>
+        private void OnGameDayEvent(int day, Season season)
+        {
+            _currentSeason = season;
+
+            foreach (var tile in tileDetailsDict)
+            {
+                //irrigation is valid for 1 day
+                if (tile.Value.daysSinceWatered > -1)
+                {
+                    tile.Value.daysSinceWatered = -1;
+                }
+                if (tile.Value.daysSinceDug > -1)
+                {
+                    tile.Value.daysSinceDug++;
+                }
+                //holes dug are valid for 5 days
+                if (tile.Value.daysSinceDug > 5 && tile.Value.seedItemID == -1)
+                {
+                    tile.Value.daysSinceDug = -1;
+                    tile.Value.canDig = true;
+                }
+            }
+
+            RefreshMap();
         }
 
         private void OnAfterSceneLoadedEvent()
@@ -48,6 +83,7 @@ namespace Rainbow.Map
             _currentGrid = FindObjectOfType<Grid>();
             _digTilemap = GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
             _waterTilemap = GameObject.FindWithTag("Water").GetComponent<Tilemap>();
+            RefreshMap();
         }
         /// <summary>
         /// 执行实际工具或物品功能
@@ -68,7 +104,7 @@ namespace Rainbow.Map
                     case ItemType.Seed:
                         EventHandler.CallPlantSeedEvent(itemDetails.itemID, currentTile);
                         EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos, itemDetails.itemType);
-                        EventHandler.CallPlaySoundEvent(SoundName.Plant);
+                        //EventHandler.CallPlaySoundEvent(SoundName.Plant);
                         break;
                     case ItemType.Commodity:
                         EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos, itemDetails.itemType);
@@ -212,6 +248,51 @@ namespace Rainbow.Map
             Vector3Int pos = new Vector3Int(tile.girdX, tile.gridY, 0);
             if (_waterTilemap != null)
                 _waterTilemap.SetTile(pos, waterTile);
+        }
+        /// <summary>
+        /// 更新瓦片信息
+        /// </summary>
+        /// <param name="tileDetails"></param>
+        private void UpdateTileDetails(TileDetails tileDetails)
+        {
+            string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
+            if (tileDetailsDict.ContainsKey(key))
+            {
+                tileDetailsDict[key] = tileDetails;
+            }
+        }
+        /// <summary>
+        /// 刷新当前地图（本质上刷新的只有挖坑浇水这些动态信息）
+        /// </summary>
+        private void RefreshMap()
+        {
+            if (_digTilemap != null)
+                _digTilemap.ClearAllTiles();
+            if (_waterTilemap != null)
+                _waterTilemap.ClearAllTiles();
+
+            DisplayMap(SceneManager.GetActiveScene().name);
+        }
+        /// <summary>
+        /// 显示地图瓦片
+        /// </summary>
+        /// <param name="sceneName">场景名字</param>
+        private void DisplayMap(string sceneName)
+        {
+            foreach (var tile in tileDetailsDict)
+            {
+                var key = tile.Key;
+                var tileDetails = tile.Value;
+
+                if (key.Contains(sceneName))
+                {
+                    if (tileDetails.daysSinceDug > -1)
+                        SetDigGround(tileDetails);
+                    if (tileDetails.daysSinceWatered > -1)
+                        SetWaterGround(tileDetails);
+                    //TODO:种子
+                }
+            }
         }
     }
 }

@@ -70,6 +70,7 @@ public class CursorManager : MonoBehaviour
 
     private void CheckPlayerInput()
     {
+        //TODO: 按住鼠标连续操作
         if (Input.GetMouseButtonDown(0) && _cursorPosValid)
         {
             EventHandler.CallMouseClickedEvent(mouseWorldPos, currentItem);

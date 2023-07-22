@@ -40,10 +40,10 @@ public static class EventHandler
     {
         GameDayEvent?.Invoke(day, season);
     }
-    public static event Action<int, int, int, int, Season> GameDateEvent;
-    public static void CallGameDateEvent(int hour, int day, int month, int year, Season season)
+    public static event Action<int, int, int, int, Season> GameHourEvent;
+    public static void CallGameHourEvent(int hour, int day, int month, int year, Season season)
     {
-        GameDateEvent?.Invoke(hour, day, month, year, season);
+        GameHourEvent?.Invoke(hour, day, month, year, season);
     }
 
     public static event Action<string, Vector3> TransitionEvent;
