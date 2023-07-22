@@ -25,7 +25,7 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
     private void Start()
     {
         isSelected = false;
-        if (itemDetails.itemID == 0)
+        if (itemDetails==null)
         {
             UpdateEmptySlot();
         }
@@ -54,8 +54,11 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
         if (isSelected)
         {
             isSelected = false;
+            InventoryUI.UpdateSlotHightlight(-1);
+            EventHandler.CallItemSelectedEvent(itemDetails, isSelected);
         }
 
+        itemDetails = null;
         slotImage.enabled = false;
         amountText.text = string.Empty;
         button.interactable = false;
@@ -63,7 +66,7 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (itemAmount == 0) return;
+        if (itemDetails==null) return;
         isSelected = !isSelected;
         //slotHightlight.gameObject.SetActive(isSelected);
         InventoryUI.UpdateSlotHightlight(slotIndex);
@@ -80,7 +83,7 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (itemAmount == 0) return;
+        if (itemDetails==null) return;
         InventoryUI.dragItem.sprite = slotImage.sprite;
         InventoryUI.dragItem.enabled = true;
         InventoryUI.dragItem.SetNativeSize();

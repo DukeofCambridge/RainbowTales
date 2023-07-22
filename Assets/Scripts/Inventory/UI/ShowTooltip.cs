@@ -19,7 +19,7 @@ namespace Rainbow.Inventory
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_slotUI.itemAmount != 0)
+            if (_slotUI.itemDetails!=null)
             {
                 InventoryUI.itemTooltip.gameObject.SetActive(true);
                 InventoryUI.itemTooltip.SetupTooltip(_slotUI.itemDetails, _slotUI.slotType);

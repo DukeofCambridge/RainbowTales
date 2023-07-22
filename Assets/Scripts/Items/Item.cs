@@ -15,7 +15,7 @@ namespace Rainbow.Items
 
         private void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             coll = GetComponent<BoxCollider2D>();
         }
 

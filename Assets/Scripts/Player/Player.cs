@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.MoveToPosition += OnMoveToPosition;
+        EventHandler.MouseClickedEvent += OnMouseClickedEvent;
     }
 
     private void OnDisable()
@@ -57,6 +58,14 @@ public class Player : MonoBehaviour
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.MoveToPosition -= OnMoveToPosition;
+        EventHandler.MouseClickedEvent -= OnMouseClickedEvent;
+    }
+
+    private void OnMouseClickedEvent(Vector3 arg1, ItemDetails arg2)
+    {
+        //first play the animation then execute the event
+        //player animation
+        EventHandler.CallExecuteActionAfterAnimation(arg1, arg2);
     }
 
     private void OnMoveToPosition(Vector3 obj)

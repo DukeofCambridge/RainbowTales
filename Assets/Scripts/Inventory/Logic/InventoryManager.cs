@@ -19,6 +19,21 @@ namespace Rainbow.Inventory
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
 
+        private void OnEnable()
+        {
+            EventHandler.DropItemEvent += OnDropItemEvent;
+        }
+
+        private void OnDisable()
+        {
+            EventHandler.DropItemEvent -= OnDropItemEvent;
+        }
+
+        private void OnDropItemEvent(int arg1, Vector3 arg2, ItemType arg3)
+        {
+            RemoveItem(arg1,1);
+        }
+
         public ItemDetails GetItemDetails(int id)
         {
             return itemDataListSo.itemDetailsList.Find(i => i.itemID == id);
@@ -118,6 +133,29 @@ namespace Rainbow.Inventory
             {
                 playerBag.itemsofInventory[targetIndex] = currentItem;
                 playerBag.itemsofInventory[fromIndex] = new InventoryItem();
+            }
+
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
+        }
+        /// <summary>
+        /// 移除指定数量的背包物品
+        /// </summary>
+        /// <param name="ID">物品ID</param>
+        /// <param name="removeAmount">数量</param>
+        private void RemoveItem(int ID, int removeAmount)
+        {
+            var index = GetItemIndexInBag(ID);
+
+            if (playerBag.itemsofInventory[index].itemAmount > removeAmount)
+            {
+                var amount = playerBag.itemsofInventory[index].itemAmount - removeAmount;
+                var item = new InventoryItem { itemID = ID, itemAmount = amount };
+                playerBag.itemsofInventory[index] = item;
+            }
+            else if (playerBag.itemsofInventory[index].itemAmount == removeAmount)
+            {
+                var item = new InventoryItem();
+                playerBag.itemsofInventory[index] = item;
             }
 
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);

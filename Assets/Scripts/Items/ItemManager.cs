@@ -12,6 +12,8 @@ namespace Rainbow.Items
         //a template item, it will be a real item only after the method 'Init(id)' is called
         public Item itemPrefab;
         private Transform _itemParent;
+        public Item bounceItemPrefab;
+        private Transform _playerTransform => FindObjectOfType<global::Player>().transform;
         //记录场景Item
         private Dictionary<string, List<SceneItem>> _sceneItemDict = new Dictionary<string, List<SceneItem>>();
 
@@ -20,12 +22,24 @@ namespace Rainbow.Items
             EventHandler.InstantiateItemInScene += OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent += OnDropItemEvent;
         }
         private void OnDisable()
         {
             EventHandler.InstantiateItemInScene -= OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent -= OnDropItemEvent;
+        }
+
+        private void OnDropItemEvent(int ID, Vector3 mousePos, ItemType itemType)
+        {
+            if (itemType == ItemType.Seed) return;
+
+            var item = Instantiate(bounceItemPrefab, _playerTransform.position, Quaternion.identity, _itemParent);
+            item.itemID = ID;
+            var dir = (mousePos - _playerTransform.position).normalized;
+            item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
         }
 
         private void OnBeforeSceneUnloadEvent()

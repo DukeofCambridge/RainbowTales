@@ -73,7 +73,7 @@ public class SceneFurniture
 }
 
 [System.Serializable]
-public class TileProperty
+public class TileProperty  // data structure for persistence in SO files
 {
     public Vector2Int tileCoordinate;
     public GridType gridType;
@@ -82,7 +82,7 @@ public class TileProperty
 
 
 [System.Serializable]
-public class TileDetails
+public class TileDetails   // data structure for reading in game
 {
     public int girdX, gridY;
     public bool canDig;

@@ -65,7 +65,7 @@ public class AnimController : MonoBehaviour
         }
         else
         {
-            Debug.Log("enable!!");
+            //Debug.Log("enable!!");
             if (currentType == PartType.Carry)
             {
                 holdItem.sprite = itemDetails.itemOnWorldSprite;
