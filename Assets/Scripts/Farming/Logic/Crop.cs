@@ -67,7 +67,7 @@ public class Crop : MonoBehaviour
 
     private IEnumerator HarvestAfterAnimation()
     {
-        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("END"))
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("End"))
         {
             yield return null;
         }

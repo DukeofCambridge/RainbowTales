@@ -63,7 +63,7 @@ public class AnimController : MonoBehaviour
         //Debug.Log("show item!");
         holdItem.sprite = itemSprite;
         holdItem.enabled = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         holdItem.enabled = false;
     }
     private void OnItemSelectedEvent(ItemDetails itemDetails, bool isSelected)

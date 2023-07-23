@@ -67,11 +67,11 @@ namespace Rainbow.Farming
             int dayCounter = cropDetails.TotalGrowthDays;
 
             //倒序计算当前的成长阶段
-            for (int i = growthStages - 1; i >= 0; i--)
+            for (int i = growthStages - 1; i >= 0; --i)
             {
                 if (tileDetails.growthDays >= dayCounter)
                 {
-                    currentStage = i+1;
+                    currentStage = i;
                     break;
                 }
 

@@ -134,13 +134,11 @@ namespace Rainbow.Map
                         break;
                     case ItemType.BreakTool:
                         break;
-                    /*case ItemType.ChopTool:
-                        //执行收割方法
-                        currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
-                        break;*/
+                    case ItemType.Axe:
+                        //axe tool is used for reaping a big tree which has a sprite much bigger than a tile, so we need to get the tileDetails from the gameObject
+                        currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);  
+                        break;
                     case ItemType.CollectTool:
-                        //Crop currentCrop = GetCropObject(mouseWorldPos);
-                        //执行收割方法
                         currentCrop.ProcessToolAction(itemDetails, currentTile);
                         EventHandler.CallPlaySoundEvent(SoundName.Basket);
                         break;

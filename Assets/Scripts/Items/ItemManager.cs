@@ -47,10 +47,16 @@ namespace Rainbow.Items
             GetAllSceneItems();
         }
 
-        private void OnInstantiateItemInScene(int id, Vector3 position)
+        /// <summary>
+        /// 在指定坐标位置生成物品
+        /// </summary>
+        /// <param name="ID">物品ID</param>
+        /// <param name="pos">世界坐标</param>
+        private void OnInstantiateItemInScene(int ID, Vector3 pos)
         {
-            Item item = Instantiate(itemPrefab, position, quaternion.identity, _itemParent);
-            item.itemID = id;
+            var item = Instantiate(bounceItemPrefab, pos, Quaternion.identity, _itemParent);
+            item.itemID = ID;
+            item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector3.up);
         }
         private void OnAfterSceneLoadedEvent()
         {

@@ -76,8 +76,8 @@ public class Player : MonoBehaviour
         if (itemDetails.itemType != ItemType.Seed && itemDetails.itemType != ItemType.Commodity && itemDetails.itemType != ItemType.Furniture)
         {
             _mouseX = mouseWorldPos.x - transform.position.x;
-            //_mouseY = mouseWorldPos.y - (transform.position.y + 0.85f);
-            _mouseY = mouseWorldPos.y - transform.position.y;
+            _mouseY = mouseWorldPos.y - (transform.position.y + 0.85f); // to offset the player pivot pos to the center
+            //_mouseY = mouseWorldPos.y - transform.position.y;
 
             if (Mathf.Abs(_mouseX) > Mathf.Abs(_mouseY))
                 _mouseY = 0;

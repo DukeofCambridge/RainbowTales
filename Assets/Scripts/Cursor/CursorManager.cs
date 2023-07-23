@@ -168,7 +168,7 @@ public class CursorManager : MonoBehaviour
         if (currentTile != null)
         {
             CropDetails currentCrop = FarmingManager.Instance.GetCropDetails(currentTile.seedItemID);
-            //Crop crop = GridMapManager.Instance.GetCropObject(mouseWorldPos);
+            Crop crop = GridMapManager.Instance.GetCropObject(mouseWorldPos);
 
             //WORKFLOW:补充所有物品类型的判断
             switch (currentItem.itemType)
@@ -187,13 +187,13 @@ public class CursorManager : MonoBehaviour
                     break;
                 case ItemType.BreakTool:
                     break;
-                /*case ItemType.ChopTool:
+                case ItemType.Axe:
                     if (crop != null)
                     {
                         if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
                     }
                     else SetCursorInValid();
-                    break;*/
+                    break;
                 case ItemType.CollectTool:
                     if (currentCrop != null)
                     {

@@ -942,6 +942,9 @@ MonoBehaviour:
   - partType: 6
     partName: 3
     overrideController: {fileID: 22100000, guid: 4dbe4be36fc4fa040999df3b27f1a87d, type: 2}
+  - partType: 5
+    partName: 3
+    overrideController: {fileID: 22100000, guid: 0942fc608151dbd4ca088c421793b5c8, type: 2}
   - partType: 0
     partName: 0
     overrideController: {fileID: 22100000, guid: dd3496a41e9cd744580b40d44aa2f67e, type: 2}
@@ -1080,7 +1083,7 @@ Animator:
   m_GameObject: {fileID: 1336584878}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: f9229f2805067bd4ba3e56fb3fb61898, type: 2}
+  m_Controller: {fileID: 22100000, guid: 0942fc608151dbd4ca088c421793b5c8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
