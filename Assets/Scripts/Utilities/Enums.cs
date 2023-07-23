@@ -17,7 +17,7 @@ public enum InventoryLocation
 
 public enum PartType
 {
-    None, Carry, Hoe, Break, Water, Chop, Collect, Reap
+    None, Carry, Hoe, Break, Water, Axe, Collect, Reap
 }
 
 public enum PartName

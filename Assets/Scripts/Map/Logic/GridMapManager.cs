@@ -38,6 +38,7 @@ namespace Rainbow.Map
             EventHandler.ExecuteActionAfterAnimation += OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent += OnGameDayEvent;
+            EventHandler.RefreshCurrentMap += RefreshMap;
         }
 
         private void OnDisable()
@@ -45,6 +46,7 @@ namespace Rainbow.Map
             EventHandler.ExecuteActionAfterAnimation -= OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent -= OnGameDayEvent;
+            EventHandler.RefreshCurrentMap -= RefreshMap;
         }
 
         /// <summary>
@@ -72,6 +74,11 @@ namespace Rainbow.Map
                 {
                     tile.Value.daysSinceDug = -1;
                     tile.Value.canDig = true;
+                    tile.Value.growthDays = -1;
+                }
+                if (tile.Value.seedItemID != -1)
+                {
+                    tile.Value.growthDays++;
                 }
             }
 
@@ -94,9 +101,11 @@ namespace Rainbow.Map
         {
             var mouseGridPos = _currentGrid.WorldToCell(mouseWorldPos);
             var currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
+            //Debug.Log("world: "+mouseWorldPos);
+            //Debug.Log("grid: "+mouseGridPos);
             if (currentTile != null)
             {
-                //Crop currentCrop = GetCropObject(mouseWorldPos);
+                Crop currentCrop = GetCropObject(mouseWorldPos);
 
                 //WORKFLOW:物品使用实际功能
                 switch (itemDetails.itemType)
@@ -128,14 +137,14 @@ namespace Rainbow.Map
                     /*case ItemType.ChopTool:
                         //执行收割方法
                         currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
-                        break;
+                        break;*/
                     case ItemType.CollectTool:
-                        // Crop currentCrop = GetCropObject(mouseWorldPos);
+                        //Crop currentCrop = GetCropObject(mouseWorldPos);
                         //执行收割方法
                         currentCrop.ProcessToolAction(itemDetails, currentTile);
                         EventHandler.CallPlaySoundEvent(SoundName.Basket);
                         break;
-                    case ItemType.ReapTool:
+                    /*case ItemType.ReapTool:
                         var reapCount = 0;
                         for (int i = 0; i < itemsInRadius.Count; i++)
                         {
@@ -157,10 +166,27 @@ namespace Rainbow.Map
                         break;*/
                 }
 
-                //UpdateTileDetails(currentTile);
+                UpdateTileDetails(currentTile);
             }
         }
+        /// <summary>
+        /// 通过物理方法判断鼠标点击位置的农作物
+        /// </summary>
+        /// <param name="mouseWorldPos">鼠标坐标</param>
+        /// <returns></returns>
+        public Crop GetCropObject(Vector3 mouseWorldPos)
+        {
+            Collider2D[] colliders = Physics2D.OverlapPointAll(mouseWorldPos);
 
+            Crop currentCrop = null;
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].GetComponent<Crop>())
+                    currentCrop = colliders[i].GetComponent<Crop>();
+            }
+            return currentCrop;
+        }
         /// <summary>
         /// 根据地图信息生成字典
         /// </summary>
@@ -171,12 +197,12 @@ namespace Rainbow.Map
             {
                 TileDetails tileDetails = new TileDetails
                 {
-                    girdX = tileProperty.tileCoordinate.x,
+                    gridX = tileProperty.tileCoordinate.x,
                     gridY = tileProperty.tileCoordinate.y
                 };
 
                 //字典的Key
-                string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + mapData.sceneName;
+                string key = tileDetails.gridX + "x" + tileDetails.gridY + "y" + mapData.sceneName;
 
                 if (GetTileDetails(key) != null)
                 {
@@ -234,7 +260,7 @@ namespace Rainbow.Map
         /// <param name="tile"></param>
         private void SetDigGround(TileDetails tile)
         {
-            Vector3Int pos = new Vector3Int(tile.girdX, tile.gridY, 0);
+            Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
             if (_digTilemap != null)
                 _digTilemap.SetTile(pos, digTile);
         }
@@ -245,7 +271,7 @@ namespace Rainbow.Map
         /// <param name="tile"></param>
         private void SetWaterGround(TileDetails tile)
         {
-            Vector3Int pos = new Vector3Int(tile.girdX, tile.gridY, 0);
+            Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
             if (_waterTilemap != null)
                 _waterTilemap.SetTile(pos, waterTile);
         }
@@ -255,7 +281,7 @@ namespace Rainbow.Map
         /// <param name="tileDetails"></param>
         private void UpdateTileDetails(TileDetails tileDetails)
         {
-            string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
+            string key = tileDetails.gridX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
             if (tileDetailsDict.ContainsKey(key))
             {
                 tileDetailsDict[key] = tileDetails;
@@ -270,7 +296,10 @@ namespace Rainbow.Map
                 _digTilemap.ClearAllTiles();
             if (_waterTilemap != null)
                 _waterTilemap.ClearAllTiles();
-
+            foreach (var crop in FindObjectsOfType<Crop>())
+            {
+                Destroy(crop.gameObject);
+            }
             DisplayMap(SceneManager.GetActiveScene().name);
         }
         /// <summary>
@@ -290,7 +319,8 @@ namespace Rainbow.Map
                         SetDigGround(tileDetails);
                     if (tileDetails.daysSinceWatered > -1)
                         SetWaterGround(tileDetails);
-                    //TODO:种子
+                    if (tileDetails.seedItemID > -1)
+                        EventHandler.CallPlantSeedEvent(tileDetails.seedItemID, tileDetails);
                 }
             }
         }

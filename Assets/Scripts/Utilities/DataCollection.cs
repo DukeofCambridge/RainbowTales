@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class ItemDetails
@@ -84,7 +85,8 @@ public class TileProperty  // data structure for persistence in SO files
 [System.Serializable]
 public class TileDetails   // data structure for reading in game
 {
-    public int girdX, gridY;
+    public int gridX;
+    public int gridY;
     public bool canDig;
     public bool canDropItem;
     public bool canPlaceFurniture;

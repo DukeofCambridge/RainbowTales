@@ -9,6 +9,7 @@ TagManager:
   - MaskCanvas
   - Dig
   - Water
+  - CropParent
   layers:
   - Default
   - TransparentFX

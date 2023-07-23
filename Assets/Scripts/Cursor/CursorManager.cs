@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Rainbow.Farming;
 using Rainbow.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -123,6 +124,7 @@ public class CursorManager : MonoBehaviour
                 ItemType.BreakTool => tool,
                 ItemType.ReapTool => tool,
                 ItemType.Furniture => tool,
+                ItemType.CollectTool=>tool,
                 _ => normal,
             };
             _cursorEnable = true;
@@ -165,7 +167,7 @@ public class CursorManager : MonoBehaviour
 
         if (currentTile != null)
         {
-            //CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
+            CropDetails currentCrop = FarmingManager.Instance.GetCropDetails(currentTile.seedItemID);
             //Crop crop = GridMapManager.Instance.GetCropObject(mouseWorldPos);
 
             //WORKFLOW:补充所有物品类型的判断
@@ -191,7 +193,7 @@ public class CursorManager : MonoBehaviour
                         if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
                     }
                     else SetCursorInValid();
-                    break;
+                    break;*/
                 case ItemType.CollectTool:
                     if (currentCrop != null)
                     {
@@ -201,7 +203,7 @@ public class CursorManager : MonoBehaviour
                     else
                         SetCursorInValid();
                     break;
-                case ItemType.ReapTool:
+                /*case ItemType.ReapTool:
                     if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
                     break;
                 case ItemType.Furniture:

@@ -43,6 +43,13 @@ public class TimeManager : MonoBehaviour
                 UpdateGameTime();
             }
         }
+
+        if (Input.GetKey(KeyCode.G))
+        {
+            gameDay += 1;
+            EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+            EventHandler.CallGameDayEvent(gameDay, gameSeason);
+        }
     }
 
     private void NewGameTime()

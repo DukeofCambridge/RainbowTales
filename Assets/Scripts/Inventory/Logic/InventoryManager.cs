@@ -22,18 +22,29 @@ namespace Rainbow.Inventory
         private void OnEnable()
         {
             EventHandler.DropItemEvent += OnDropItemEvent;
+            EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
         }
 
         private void OnDisable()
         {
             EventHandler.DropItemEvent -= OnDropItemEvent;
+            EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
         }
 
         private void OnDropItemEvent(int arg1, Vector3 arg2, ItemType arg3)
         {
             RemoveItem(arg1,1);
         }
+        private void OnHarvestAtPlayerPosition(int ID)
+        {
+            //是否已经有该物品
+            var index = GetItemIndexInBag(ID);
 
+            AddItemAtIndex(ID, index, 1);
+
+            //更新UI
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
+        }
         public ItemDetails GetItemDetails(int id)
         {
             return itemDataListSo.itemDetailsList.Find(i => i.itemID == id);

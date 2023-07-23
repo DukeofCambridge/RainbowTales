@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Rainbow.Inventory;
 using UnityEngine;
 
 public class AnimController : MonoBehaviour
@@ -28,6 +29,7 @@ public class AnimController : MonoBehaviour
         EventHandler.ItemSelectedEvent += OnItemSelectedEvent;
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
     }
 
     private void OnDisable()
@@ -35,6 +37,7 @@ public class AnimController : MonoBehaviour
         EventHandler.ItemSelectedEvent -= OnItemSelectedEvent;
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
     }
 
     private void OnBeforeSceneUnloadEvent()
@@ -47,7 +50,22 @@ public class AnimController : MonoBehaviour
     {
         
     }
-
+    private void OnHarvestAtPlayerPosition(int ID)
+    {
+        Sprite itemSprite = InventoryManager.Instance.GetItemDetails(ID).itemOnWorldSprite;
+        if (holdItem.enabled == false)
+        {
+            StartCoroutine(ShowItem(itemSprite));
+        }
+    }
+    private IEnumerator ShowItem(Sprite itemSprite)
+    {
+        //Debug.Log("show item!");
+        holdItem.sprite = itemSprite;
+        holdItem.enabled = true;
+        yield return new WaitForSeconds(1f);
+        holdItem.enabled = false;
+    }
     private void OnItemSelectedEvent(ItemDetails itemDetails, bool isSelected)
     {
         //WORKFLOW:不同的工具返回不同的动画在这里补全
@@ -55,8 +73,13 @@ public class AnimController : MonoBehaviour
         {
             ItemType.Seed => PartType.Carry,
             ItemType.Commodity => PartType.Carry,
-            ItemType.Hoe=>PartType.Hoe,
-            ItemType.WaterTool=>PartType.Water,
+            ItemType.Hoe => PartType.Hoe,
+            ItemType.WaterTool => PartType.Water,
+            ItemType.CollectTool => PartType.Collect,
+            ItemType.Axe => PartType.Axe,
+            ItemType.BreakTool => PartType.Break,
+            ItemType.ReapTool => PartType.Reap,
+            ItemType.Furniture => PartType.Carry,
             _ => PartType.None
         };
 
@@ -72,6 +95,10 @@ public class AnimController : MonoBehaviour
             {
                 holdItem.sprite = itemDetails.itemOnWorldSprite;
                 holdItem.enabled = true;
+            }
+            else
+            {
+                holdItem.enabled = false;
             }
         }
         SwitchAnimator(currentType);
