@@ -23,22 +23,22 @@ MonoBehaviour:
     itemAmount: 1
   - itemID: 1005
     itemAmount: 1
+  - itemID: 1006
+    itemAmount: 1
   - itemID: 2001
-    itemAmount: 10
+    itemAmount: 11
   - itemID: 2004
     itemAmount: 10
   - itemID: 4002
-    itemAmount: 3
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
+    itemAmount: 6
+  - itemID: 4001
+    itemAmount: 86
+  - itemID: 4003
+    itemAmount: 4
+  - itemID: 4004
+    itemAmount: 2
+  - itemID: 3011
+    itemAmount: 23
   - itemID: 0
     itemAmount: 0
   - itemID: 0

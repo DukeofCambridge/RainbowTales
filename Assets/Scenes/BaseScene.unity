@@ -930,6 +930,9 @@ MonoBehaviour:
   - partType: 4
     partName: 2
     overrideController: {fileID: 22100000, guid: ba896dca835934c46833d90aa855510f, type: 2}
+  - partType: 7
+    partName: 2
+    overrideController: {fileID: 22100000, guid: c56f13ec873823f4ea6dedebf02efbeb, type: 2}
   - partType: 0
     partName: 3
     overrideController: {fileID: 22100000, guid: 4dbe4be36fc4fa040999df3b27f1a87d, type: 2}
@@ -945,6 +948,12 @@ MonoBehaviour:
   - partType: 5
     partName: 3
     overrideController: {fileID: 22100000, guid: 0942fc608151dbd4ca088c421793b5c8, type: 2}
+  - partType: 3
+    partName: 3
+    overrideController: {fileID: 22100000, guid: 78c4e539a7b09b84290e523cb3890275, type: 2}
+  - partType: 7
+    partName: 3
+    overrideController: {fileID: 22100000, guid: 95025a9919b55074e9c7df4e2257d2e2, type: 2}
   - partType: 0
     partName: 0
     overrideController: {fileID: 22100000, guid: dd3496a41e9cd744580b40d44aa2f67e, type: 2}
@@ -954,6 +963,9 @@ MonoBehaviour:
   - partType: 6
     partName: 0
     overrideController: {fileID: 22100000, guid: 0a89495e64b99664b949bf51e7fd8e34, type: 2}
+  - partType: 7
+    partName: 0
+    overrideController: {fileID: 22100000, guid: e24002c9c91e7d74183d6aadc7fabbde, type: 2}
   - partType: 0
     partName: 1
     overrideController: {fileID: 22100000, guid: 1f13dc6f0eb345243ac147352677d546, type: 2}
@@ -963,6 +975,9 @@ MonoBehaviour:
   - partType: 6
     partName: 1
     overrideController: {fileID: 22100000, guid: 96ee9607c55d7684581b3eceeef5327b, type: 2}
+  - partType: 7
+    partName: 1
+    overrideController: {fileID: 22100000, guid: d0712a7187a49fd47b0063da7890b05d, type: 2}
 --- !u!1 &1036932398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,7 +1098,7 @@ Animator:
   m_GameObject: {fileID: 1336584878}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 0942fc608151dbd4ca088c421793b5c8, type: 2}
+  m_Controller: {fileID: 22100000, guid: 4dbe4be36fc4fa040999df3b27f1a87d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1396,6 +1411,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1641329474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1641329476}
+  - component: {fileID: 1641329475}
+  m_Layer: 0
+  m_Name: ObjectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1641329475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641329474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89bcf8f759c57d4e8d9bc378579a5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolPrefabs:
+  - {fileID: 927361734363356372, guid: d02bf86c310f9a049ad5bfefb485d83b, type: 3}
+  - {fileID: 927361734363356372, guid: d556c36876bb0b049bca01039c571aa2, type: 3}
+  - {fileID: 4449190822968621482, guid: a293386b03c70ef4e83788d72757170f, type: 3}
+  - {fileID: 4449190822968621482, guid: 46f728d083a45e84fb284ef89702a88a, type: 3}
+--- !u!4 &1641329476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641329474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.94407743, y: 4.398311, z: 5.752392}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1728736265
 GameObject:

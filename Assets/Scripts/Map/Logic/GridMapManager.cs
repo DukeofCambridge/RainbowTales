@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Rainbow.Farming;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -24,11 +25,17 @@ namespace Rainbow.Map
         
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>(); //key:scene name+coordinate; value:tile details 
         private Grid _currentGrid;
-
+        //场景是否第一次加载
+        private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();
+        
+        //杂草列表
+        private List<ReapItem> itemsInRadius;
+        
         private void Start()
         {
             foreach (var mapData in mapDataList)
             {
+                firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
             }
         }
@@ -90,6 +97,12 @@ namespace Rainbow.Map
             _currentGrid = FindObjectOfType<Grid>();
             _digTilemap = GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
             _waterTilemap = GameObject.FindWithTag("Water").GetComponent<Tilemap>();
+            if (firstLoadDict[SceneManager.GetActiveScene().name])
+            {
+                //预先生成农作物
+                EventHandler.CallGenerateCropEvent();
+                firstLoadDict[SceneManager.GetActiveScene().name] = false;
+            }
             RefreshMap();
         }
         /// <summary>
@@ -133,10 +146,10 @@ namespace Rainbow.Map
                         //EventHandler.CallPlaySoundEvent(SoundName.Water);
                         break;
                     case ItemType.BreakTool:
-                        break;
+                    case ItemType.ReapTool:
                     case ItemType.Axe:
                         //axe tool is used for reaping a big tree which has a sprite much bigger than a tile, so we need to get the tileDetails from the gameObject
-                        currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);  
+                        currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);  
                         break;
                     case ItemType.CollectTool:
                         currentCrop.ProcessToolAction(itemDetails, currentTile);
@@ -144,7 +157,7 @@ namespace Rainbow.Map
                         break;
                     /*case ItemType.ReapTool:
                         var reapCount = 0;
-                        for (int i = 0; i < itemsInRadius.Count; i++)
+                        for (int i = 0; i < itemsInRadius.Count; ++i)
                         {
                             EventHandler.CallParticleEffectEvent(ParticleEffectType.ReapableScenery, itemsInRadius[i].transform.position + Vector3.up);
                             itemsInRadius[i].SpawnHarvestItems();
@@ -184,6 +197,35 @@ namespace Rainbow.Map
                     currentCrop = colliders[i].GetComponent<Crop>();
             }
             return currentCrop;
+        }
+        /// <summary>
+        /// 返回工具范围内的杂草
+        /// </summary>
+        /// <param name="tool">物品信息</param>
+        /// <returns></returns>
+        public bool HaveReapableItemsInRadius(Vector3 mouseWorldPos, ItemDetails tool)
+        {
+            itemsInRadius = new List<ReapItem>();
+
+            Collider2D[] colliders = new Collider2D[10];
+
+            Physics2D.OverlapCircleNonAlloc(mouseWorldPos, tool.itemUseRadius, colliders);
+
+            if (colliders.Length > 0)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i] != null)
+                    {
+                        if (colliders[i].GetComponent<ReapItem>())
+                        {
+                            var item = colliders[i].GetComponent<ReapItem>();
+                            itemsInRadius.Add(item);
+                        }
+                    }
+                }
+            }
+            return itemsInRadius.Count > 0;
         }
         /// <summary>
         /// 根据地图信息生成字典
@@ -277,13 +319,11 @@ namespace Rainbow.Map
         /// 更新瓦片信息
         /// </summary>
         /// <param name="tileDetails"></param>
-        private void UpdateTileDetails(TileDetails tileDetails)
+        public void UpdateTileDetails(TileDetails tileDetails)
         {
             string key = tileDetails.gridX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
-            if (tileDetailsDict.ContainsKey(key))
-            {
-                tileDetailsDict[key] = tileDetails;
-            }
+            tileDetailsDict[key] = tileDetails;
+
         }
         /// <summary>
         /// 刷新当前地图（本质上刷新的只有挖坑浇水这些动态信息）

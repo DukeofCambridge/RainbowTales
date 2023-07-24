@@ -186,7 +186,7 @@ public class CursorManager : MonoBehaviour
                     if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
                     break;
                 case ItemType.BreakTool:
-                    break;
+                case ItemType.ReapTool:
                 case ItemType.Axe:
                     if (crop != null)
                     {

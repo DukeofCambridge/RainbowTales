@@ -37,10 +37,10 @@ public class Crop : MonoBehaviour
                     anim.SetTrigger("RotateLeft");
             }
             //播放粒子
-            /*if (cropDetails.hasParticalEffect)
+            if (cropDetails.hasParticalEffect)
                 EventHandler.CallParticleEffectEvent(cropDetails.effectType, transform.position + cropDetails.effectPos);
             //播放声音
-            if (cropDetails.soundEffect != SoundName.none)
+            /*if (cropDetails.soundEffect != SoundName.none)
             {
                 EventHandler.CallPlaySoundEvent(cropDetails.soundEffect);
             }*/

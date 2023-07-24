@@ -15,7 +15,7 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
     public SlotType slotType;
     public bool isSelected;
     public int slotIndex;
-    private InventoryUI InventoryUI => GetComponentInParent<InventoryUI>();
+    public InventoryUI InventoryUI => GetComponentInParent<InventoryUI>();
 
     //物品信息
     public ItemDetails itemDetails;
