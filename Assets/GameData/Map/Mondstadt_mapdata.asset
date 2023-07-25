@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Mondstadt_mapdata
   m_EditorClassIdentifier: 
   sceneName: 01.Mondstadt
+  gridWidth: 57
+  gridHeight: 45
+  originX: -31
+  originY: -26
   tileProperties:
   - tileCoordinate: {x: -17, y: -13}
     gridType: 0

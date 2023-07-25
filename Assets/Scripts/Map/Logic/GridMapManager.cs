@@ -278,7 +278,7 @@ namespace Rainbow.Map
         /// </summary>
         /// <param name="key">x+y+地图名字</param>
         /// <returns></returns>
-        private TileDetails GetTileDetails(string key)
+        public TileDetails GetTileDetails(string key)
         {
             if (tileDetailsDict.TryGetValue(key, out TileDetails tileDetails))
                 return tileDetails;
@@ -361,6 +361,33 @@ namespace Rainbow.Map
                         EventHandler.CallPlantSeedEvent(tileDetails.seedItemID, tileDetails);
                 }
             }
+        }
+        /// <summary>
+        /// 根据场景名字构建网格范围，输出范围和原点
+        /// </summary>
+        /// <param name="sceneName">场景名字</param>
+        /// <param name="gridDimensions">网格范围</param>
+        /// <param name="gridOrigin">网格原点</param>
+        /// <returns>是否有当前场景的信息</returns>
+        public bool GetGridDimensions(string sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
+        {
+            gridDimensions = Vector2Int.zero;
+            gridOrigin = Vector2Int.zero;
+
+            foreach (var mapData in mapDataList)
+            {
+                if (mapData.sceneName == sceneName)
+                {
+                    gridDimensions.x = mapData.gridWidth;
+                    gridDimensions.y = mapData.gridHeight;
+
+                    gridOrigin.x = mapData.originX;
+                    gridOrigin.y = mapData.originY;
+
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
