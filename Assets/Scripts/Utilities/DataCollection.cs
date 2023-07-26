@@ -108,9 +108,9 @@ public class NPCPosition
 
 //场景路径
 [System.Serializable]
-public class SceneRoute
+public class InterSceneRoute
 {
-    [SceneName] public string fromSceneName;
+    public string fromSceneName;
     public string gotoSceneName;
     public List<ScenePath> scenePathList;
 }
@@ -118,7 +118,7 @@ public class SceneRoute
 [System.Serializable]
 public class ScenePath
 {
-    [SceneName] public string sceneName;
+    public string sceneName;
     public Vector2Int fromGridCell;
     public Vector2Int gotoGridCell;
 }

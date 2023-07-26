@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4849c3d984fae49b359460cd6f2889, type: 3}
+  m_Name: Scene Route Data List_SO
+  m_EditorClassIdentifier: 
+  sceneRouteList:
+  - fromSceneName: 01.Mondstadt
+    gotoSceneName: 00.Home
+    scenePathList:
+    - sceneName: 00.Home
+      fromGridCell: {x: -14, y: -11}
+      gotoGridCell: {x: 999, y: 999}
+    - sceneName: 01.Mondstadt
+      fromGridCell: {x: 999, y: 999}
+      gotoGridCell: {x: -4, y: 2}
+  - fromSceneName: 00.Home
+    gotoSceneName: 01.Mondstadt
+    scenePathList:
+    - sceneName: 01.Mondstadt
+      fromGridCell: {x: -4, y: 2}
+      gotoGridCell: {x: 999, y: 999}
+    - sceneName: 00.Home
+      fromGridCell: {x: 999, y: 999}
+      gotoGridCell: {x: -14, y: -11}
