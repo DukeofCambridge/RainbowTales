@@ -9,8 +9,8 @@ public class ScheduleDetails : IComparable<ScheduleDetails>
     public int priority;    //优先级越小优先执行
     public Season season;
     public Vector2Int targetGridPosition;
-    public AnimationClip clipAtStop;
-    public bool interactable;
+    //public AnimationClip clipAtStop;
+    public bool interactable = true;
 
     public ScheduleDetails(int hour, int minute, int day, int priority, Season season, string targetScene, Vector2Int targetGridPosition, AnimationClip clipAtStop, bool interactable)
     {
@@ -21,7 +21,7 @@ public class ScheduleDetails : IComparable<ScheduleDetails>
         this.season = season;
         this.targetScene = targetScene;
         this.targetGridPosition = targetGridPosition;
-        this.clipAtStop = clipAtStop;
+        //this.clipAtStop = clipAtStop;
         this.interactable = interactable;
     }
     public int Time => (hour * 100) + minute;

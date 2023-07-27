@@ -9,7 +9,7 @@ public class ItemInteractive : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isAnimating)
+        if (!isAnimating&&other.CompareTag("Player"))
         {
             if (other.transform.position.x < transform.position.x)
             {
@@ -27,7 +27,7 @@ public class ItemInteractive : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!isAnimating)
+        if (!isAnimating&&other.CompareTag("Player"))
         {
             if (other.transform.position.x > transform.position.x)
             {

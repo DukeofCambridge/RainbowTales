@@ -9,9 +9,16 @@ public class InventoryUI : MonoBehaviour
 {
     public ItemTooltip itemTooltip;
     public Image dragItem;
+    [Header("玩家背包UI")]
     [SerializeField] private GameObject bagUI;
     private bool _bagOpened;
     [SerializeField] private SlotUI[] playerBagSlots;
+    
+    [Header("商店仓库")]
+    [SerializeField] private GameObject baseBag;
+    public GameObject shopSlotPrefab;
+    public GameObject boxSlotPrefab;
+
     private void Start()
     {
         for (int i = 0; i < playerBagSlots.Length; ++i)

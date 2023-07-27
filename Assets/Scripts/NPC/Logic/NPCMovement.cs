@@ -44,14 +44,14 @@ public class NPCMovement : MonoBehaviour//, ISaveable
     private bool npcMove;
     private bool sceneLoaded;
     public bool interactable;
-    public bool isFirstLoad;
+    //public bool isFirstLoad;
     private Season currentSeason;
     //动画计时器
     private float animationBreakTime;
     private bool canPlayStopAnimaiton;
-    private AnimationClip stopAnimationClip;
-    public AnimationClip blankAnimationClip;
-    private AnimatorOverrideController animOverride;
+    //private AnimationClip stopAnimationClip;
+    //public AnimationClip blankAnimationClip;
+    //private AnimatorOverrideController animOverride;
 
     private TimeSpan GameTime => TimeManager.Instance.GameTime;
 
@@ -65,13 +65,15 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         anim = GetComponent<Animator>();
         movementSteps = new Stack<MovementStep>();
 
-        animOverride = new AnimatorOverrideController(anim.runtimeAnimatorController);
-        anim.runtimeAnimatorController = animOverride;
+        //animOverride = new AnimatorOverrideController(anim.runtimeAnimatorController);
+        //anim.runtimeAnimatorController = animOverride;
         scheduleSet = new SortedSet<ScheduleDetails>();
-
-        foreach (var schedule in scheduleData.scheduleList)
+        if (scheduleData.scheduleList.Count > 0)
         {
-            scheduleSet.Add(schedule);
+            foreach (var schedule in scheduleData.scheduleList)
+            {
+                scheduleSet.Add(schedule);
+            }
         }
     }
 
@@ -128,7 +130,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
     private void OnStartNewGameEvent(int obj)
     {
         isInitialised = false;
-        isFirstLoad = true;
+        //isFirstLoad = true;
     }
 
     private void OnGameMinuteEvent(int minute, int hour, int day, Season season)
@@ -163,6 +165,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
 
     private void OnAfterSceneLoadedEvent()
     {
+        //Debug.Log("sceneloaded");
         grid = FindObjectOfType<Grid>();
         CheckVisiable();
 
@@ -174,13 +177,13 @@ public class NPCMovement : MonoBehaviour//, ISaveable
 
         sceneLoaded = true;
 
-        if (!isFirstLoad)
+        /*if (!isFirstLoad)
         {
             currentGridPosition = grid.WorldToCell(transform.position);
             var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, targetScene, (Vector2Int)_targetGridPosition, stopAnimationClip, interactable);
             BuildPath(schedule);
             isFirstLoad = true;
-        }
+        }*/
     }
 
     private void CheckVisiable()
@@ -282,7 +285,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         currentSchedule = schedule;
         targetScene = schedule.targetScene;
         _targetGridPosition = (Vector3Int)schedule.targetGridPosition;
-        stopAnimationClip = schedule.clipAtStop;
+        //stopAnimationClip = schedule.clipAtStop;
         this.interactable = schedule.interactable;
         //AStar generates the coordinate sequence in the path, then the method UpdateTimeOnPath() add a timestamp for every coordinate
         if (schedule.targetScene == currentScene)
@@ -394,13 +397,14 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         anim.SetBool("isMoving", isMoving);
         if (isMoving)
         {
-            anim.SetBool("Exit", true);
+            //anim.SetBool("Exit", true);
             anim.SetFloat("DirX", dir.x);
             anim.SetFloat("DirY", dir.y);
         }
         else
         {
-            anim.SetBool("Exit", false);
+            //anim.SetBool("Exit", false);
+            //anim.SetBool("Exit", true);
         }
     }
 
@@ -409,10 +413,16 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         //强制面向镜头
         anim.SetFloat("DirX", 0);
         anim.SetFloat("DirY", -1);
-
+        //Debug.Log("stopanimation!");
         animationBreakTime = Settings.AnimationBreakTime;
-        if (stopAnimationClip != null)
+        anim.SetTrigger("eventAnimation");
+        yield return null;
+        /*anim.SetBool("EventAnimation", true);
+        yield return null;
+        anim.SetBool("EventAnimation", false);*/
+        /*if (stopAnimationClip != null)
         {
+            //Debug.Log("there is stop clip");
             animOverride[blankAnimationClip] = stopAnimationClip;
             anim.SetBool("EventAnimation", true);
             yield return null;
@@ -422,7 +432,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         {
             animOverride[stopAnimationClip] = blankAnimationClip;
             anim.SetBool("EventAnimation", false);
-        }
+        }*/
     }
 
     #region 设置NPC显示情况

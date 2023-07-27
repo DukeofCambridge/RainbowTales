@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Rainbow.Dialogue;
 using UnityEngine;
 
 public static class EventHandler
@@ -111,11 +112,11 @@ public static class EventHandler
         GenerateCropEvent?.Invoke();
     }
 
-    /*public static event Action<DialoguePiece> ShowDialogueEvent;
+    public static event Action<DialoguePiece> ShowDialogueEvent;
     public static void CallShowDialogueEvent(DialoguePiece piece)
     {
         ShowDialogueEvent?.Invoke(piece);
-    }*/
+    }
 
     //商店开启
     public static event Action<SlotType, InventoryBag_SO> BaseBagOpenEvent;

@@ -26,7 +26,7 @@ public class Settings
     public const float GridCellSize = 1;
     public const float GridCellDiagonalSize = 1.41f;
     public const float PixelSize = 0.05f;   //20*20 占 1 unit
-    public const float AnimationBreakTime = 5f; //动画间隔时间
+    public const float AnimationBreakTime = 15f; //动画间隔时间
     public const int MaxGridSize = 999;
 
     //灯光
