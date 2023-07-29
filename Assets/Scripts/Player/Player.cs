@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.MoveToPosition += OnMoveToPosition;
         EventHandler.MouseClickedEvent += OnMouseClickedEvent;
+        EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
     }
 
     private void OnDisable()
@@ -65,8 +66,20 @@ public class Player : MonoBehaviour
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.MoveToPosition -= OnMoveToPosition;
         EventHandler.MouseClickedEvent -= OnMouseClickedEvent;
+        EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
     }
-
+    private void OnUpdateGameStateEvent(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Gameplay:
+                _isDisabled = false;
+                break;
+            case GameState.Pause:
+                _isDisabled = true;
+                break;
+        }
+    }
     private void OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
     {
         //first play the animation then execute the event

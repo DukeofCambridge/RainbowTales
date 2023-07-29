@@ -83,8 +83,11 @@ namespace Rainbow.Dialogue
                 
                 isTalking = false;
 
-                OnFinishEvent?.Invoke();
-                //canTalk = false;
+                if (OnFinishEvent != null)
+                {
+                    OnFinishEvent.Invoke();
+                    canTalk = false;
+                }
             }
         }
     }

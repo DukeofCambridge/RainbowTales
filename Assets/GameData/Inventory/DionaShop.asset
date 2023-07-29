@@ -21,3 +21,11 @@ MonoBehaviour:
     itemAmount: 1
   - itemID: 2004
     itemAmount: 1
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0

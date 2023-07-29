@@ -13,7 +13,9 @@ namespace Rainbow.Inventory
         public ItemDataList_SO itemDataListSo;
         [Header("背包数据")]
         public InventoryBag_SO playerBag;
-
+        private InventoryBag_SO _currentBoxBag;
+        [Header("交易")]
+        public int playerMoney;
         private void Start()
         {
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
@@ -149,6 +151,58 @@ namespace Rainbow.Inventory
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
         /// <summary>
+        /// 跨背包交换数据
+        /// </summary>
+        /// <param name="locationFrom"></param>
+        /// <param name="fromIndex"></param>
+        /// <param name="locationTarget"></param>
+        /// <param name="targetIndex"></param>
+        public void SwapItem(InventoryLocation locationFrom, int fromIndex, InventoryLocation locationTarget, int targetIndex)
+        {
+            var currentList = GetItemList(locationFrom);
+            var targetList = GetItemList(locationTarget);
+
+            InventoryItem currentItem = currentList[fromIndex];
+
+            if (targetIndex < targetList.Count)
+            {
+                InventoryItem targetItem = targetList[targetIndex];
+
+                if (targetItem.itemID != 0 && currentItem.itemID != targetItem.itemID)  //有不相同的两个物品
+                {
+                    currentList[fromIndex] = targetItem;
+                    targetList[targetIndex] = currentItem;
+                }
+                else if (currentItem.itemID == targetItem.itemID) //相同的两个物品
+                {
+                    targetItem.itemAmount += currentItem.itemAmount;
+                    targetList[targetIndex] = targetItem;
+                    currentList[fromIndex] = new InventoryItem();
+                }
+                else    //目标空格子
+                {
+                    targetList[targetIndex] = currentItem;
+                    currentList[fromIndex] = new InventoryItem();
+                }
+                EventHandler.CallUpdateInventoryUI(locationFrom, currentList);
+                EventHandler.CallUpdateInventoryUI(locationTarget, targetList);
+            }
+        }
+        /// <summary>
+        /// 根据位置返回背包数据列表
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        private List<InventoryItem> GetItemList(InventoryLocation location)
+        {
+            return location switch
+            {
+                InventoryLocation.Player => playerBag.itemsofInventory,
+                InventoryLocation.Box => _currentBoxBag.itemsofInventory,
+                _ => null
+            };
+        }
+        /// <summary>
         /// 移除指定数量的背包物品
         /// </summary>
         /// <param name="ID">物品ID</param>
@@ -169,6 +223,52 @@ namespace Rainbow.Inventory
                 playerBag.itemsofInventory[index] = item;
             }
 
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
+        }
+        /// <summary>
+        /// 交易物品
+        /// </summary>
+        /// <param name="itemDetails">物品信息</param>
+        /// <param name="amount">交易数量</param>
+        /// <param name="isSellTrade">是否卖东西</param>
+        public void TradeItem(ItemDetails itemDetails, int amount, bool isSellTrade)
+        {
+            int cost = itemDetails.itemPrice * amount;
+            //获得物品背包位置
+            int index = GetItemIndexInBag(itemDetails.itemID);
+
+            if (isSellTrade)    //卖
+            {
+                if (playerBag.itemsofInventory[index].itemAmount >= amount)
+                {
+                    RemoveItem(itemDetails.itemID, amount);
+                    //卖出总价
+                    cost = (int)(cost * itemDetails.sellPercentage);
+                    playerMoney += cost;
+                }
+                else
+                {
+                    ShowMessage.Instance.Show("持有数量不够");
+                }
+            }
+            else if (playerMoney - cost >= 0)   //买
+            {
+                if (CheckBagCapacity())
+                {
+                    AddItemAtIndex(itemDetails.itemID, index, amount);
+                    playerMoney -= cost;
+                }
+                else
+                {
+                    ShowMessage.Instance.Show("背包已满");
+                }
+                
+            }
+            else   //钱不够
+            {
+                ShowMessage.Instance.Show("持有金币不够");
+            }
+            //刷新UI
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
     }

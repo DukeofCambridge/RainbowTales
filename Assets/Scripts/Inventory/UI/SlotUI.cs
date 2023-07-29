@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDragHandler,IEndDragHandler
+public class SlotUI : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     [Header("组件获取")]
     [SerializeField] private Image slotImage;
@@ -16,7 +16,18 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
     public bool isSelected;
     public int slotIndex;
     public InventoryUI InventoryUI => GetComponentInParent<InventoryUI>();
-
+    public InventoryLocation Location
+    {
+        get
+        {
+            return slotType switch
+            {
+                SlotType.Bag => InventoryLocation.Player,
+                SlotType.Box => InventoryLocation.Box,
+                _ => InventoryLocation.Player
+            };
+        }
+    }
     //物品信息
     public ItemDetails itemDetails;
     public int itemAmount;
@@ -104,13 +115,27 @@ public class SlotUI : MonoBehaviour,IPointerClickHandler, IDragHandler,IBeginDra
             var targetSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>();
             int targetIndex = targetSlot.slotIndex;
 
-            //在Player自身背包范围内交换
+            //swap within player bag
             if (slotType == SlotType.Bag && targetSlot.slotType == SlotType.Bag)
             {
                 InventoryManager.Instance.SwapItem(slotIndex, targetIndex);
             }
-
-            //清空所有高亮显示
+            //buy from shop
+            else if (slotType == SlotType.Shop && targetSlot.slotType == SlotType.Bag)  
+            {
+                EventHandler.CallShowTradeUI(itemDetails, false);
+            }
+            //sell to shop
+            else if (slotType == SlotType.Bag && targetSlot.slotType == SlotType.Shop)  //卖
+            {
+                EventHandler.CallShowTradeUI(itemDetails, true);
+            }
+            //swap between different inventories
+            else if (slotType != SlotType.Shop && targetSlot.slotType != SlotType.Shop && slotType != targetSlot.slotType)
+            {
+                InventoryManager.Instance.SwapItem(Location, slotIndex, targetSlot.Location, targetSlot.slotIndex);
+            }
+            //clear the highlights
             InventoryUI.UpdateSlotHightlight(-1);
         }
         else    //测试扔在地上

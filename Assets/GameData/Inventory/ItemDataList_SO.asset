@@ -104,11 +104,11 @@ MonoBehaviour:
     itemOnWorldSprite: {fileID: 21300000, guid: a190370c9a26a43aa9c3e596f8976fc4, type: 3}
     itemDescription: 
     itemUseRadius: 2
-    canPickedup: 0
-    canDropped: 0
-    canCarried: 0
-    itemPrice: 0
-    sellPercentage: 0
+    canPickedup: 1
+    canDropped: 1
+    canCarried: 1
+    itemPrice: 10
+    sellPercentage: 0.5
   - itemID: 2003
     itemName: "\u8304\u5B50\u79CD\u5B50"
     itemType: 0
@@ -116,11 +116,11 @@ MonoBehaviour:
     itemOnWorldSprite: {fileID: 21300000, guid: 7fa27847daa7848cd8221a18379f7a21, type: 3}
     itemDescription: 
     itemUseRadius: 2
-    canPickedup: 0
-    canDropped: 0
-    canCarried: 0
-    itemPrice: 0
-    sellPercentage: 0
+    canPickedup: 1
+    canDropped: 1
+    canCarried: 1
+    itemPrice: 10
+    sellPercentage: 0.5
   - itemID: 2004
     itemName: "\u8461\u8404\u79CD\u5B50"
     itemType: 0
@@ -131,8 +131,8 @@ MonoBehaviour:
     canPickedup: 1
     canDropped: 1
     canCarried: 1
-    itemPrice: 0
-    sellPercentage: 0
+    itemPrice: 10
+    sellPercentage: 0.5
   - itemID: 2005
     itemName: "\u6C34\u841D\u535C\u79CD\u5B50"
     itemType: 0
