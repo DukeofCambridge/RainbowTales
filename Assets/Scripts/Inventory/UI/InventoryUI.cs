@@ -20,6 +20,8 @@ public class InventoryUI : MonoBehaviour
     public GameObject shopSlotPrefab;
     public GameObject boxSlotPrefab;
     [SerializeField] private List<SlotUI> baseBagSlots;
+    public Image ownerImage;
+    public Sprite[] owners=new Sprite[2];
     [Header("交易UI")]
     public TradeUI tradeUI;
     public TextMeshProUGUI playerMoneyText;
@@ -73,7 +75,13 @@ public class InventoryUI : MonoBehaviour
             SlotType.Box => boxSlotPrefab,
             _ => null,
         };
-
+        if (slotType == SlotType.Shop)
+        {
+            ownerImage.sprite = owners[0];
+        }else if (slotType == SlotType.Box)
+        {
+            ownerImage.sprite = owners[1];
+        }
         //生成背包UI
         baseBag.SetActive(true);
 
@@ -88,7 +96,7 @@ public class InventoryUI : MonoBehaviour
         //if you are using the component "content size fitter", you'd better use the instruction below
         LayoutRebuilder.ForceRebuildLayoutImmediate(baseBag.GetComponent<RectTransform>());
         //open the player bag as well if shop ui is opened
-        if (slotType == SlotType.Shop)
+        if (slotType == SlotType.Shop || slotType == SlotType.Box) 
         {
             bagUI.GetComponent<RectTransform>().pivot = new Vector2(-1, 0.5f);
             bagUI.SetActive(true);
@@ -114,7 +122,7 @@ public class InventoryUI : MonoBehaviour
         }
         baseBagSlots.Clear();
 
-        if (slotType == SlotType.Shop)
+        if (slotType == SlotType.Shop || slotType == SlotType.Box)
         {
             bagUI.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
             bagUI.SetActive(false);

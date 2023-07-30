@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class SlotUI : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     [Header("组件获取")]
-    [SerializeField] private Image slotImage;
-    [SerializeField] private TextMeshProUGUI amountText;
+    public Image slotImage;
+    public TextMeshProUGUI amountText;
     public Image slotHightlight;
     [SerializeField] private Button button;
     [Header("格子类型")]
@@ -54,6 +54,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginD
         itemAmount = amount;
         amountText.text = amount.ToString();
         slotImage.enabled = true;
+        amountText.enabled = true;
         button.interactable = true;
     }
 
@@ -95,6 +96,8 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginD
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (itemDetails==null) return;
+        slotImage.enabled = false;
+        amountText.enabled = false;
         InventoryUI.dragItem.sprite = slotImage.sprite;
         InventoryUI.dragItem.enabled = true;
         InventoryUI.dragItem.SetNativeSize();
@@ -126,27 +129,33 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginD
                 EventHandler.CallShowTradeUI(itemDetails, false);
             }
             //sell to shop
-            else if (slotType == SlotType.Bag && targetSlot.slotType == SlotType.Shop)  //卖
+            else if (slotType == SlotType.Bag && targetSlot.slotType == SlotType.Shop)
             {
                 EventHandler.CallShowTradeUI(itemDetails, true);
             }
             //swap between different inventories
-            else if (slotType != SlotType.Shop && targetSlot.slotType != SlotType.Shop && slotType != targetSlot.slotType)
+            //else if (slotType != SlotType.Shop && targetSlot.slotType != SlotType.Shop && slotType != targetSlot.slotType)
+            else if (slotType != SlotType.Shop && targetSlot.slotType != SlotType.Shop)
             {
                 InventoryManager.Instance.SwapItem(Location, slotIndex, targetSlot.Location, targetSlot.slotIndex);
             }
             //clear the highlights
             InventoryUI.UpdateSlotHightlight(-1);
         }
-        else    //测试扔在地上
+        else
         {
-            if (itemDetails.canDropped)
+            slotImage.enabled = true;
+            amountText.enabled = true;
+        }
+        /*else    //测试扔在地上
+        {
+            if (slotType==SlotType.Bag&&itemDetails.canDropped)
             {
                 //鼠标对应世界地图坐标
                 var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-
-                EventHandler.CallInstantiateItemInScene(itemDetails.itemID, pos);
+                EventHandler.CallDropItemEvent(itemDetails.itemID, pos, itemDetails.itemType);
+                //EventHandler.CallInstantiateItemInScene(itemDetails.itemID, pos);
             }
-        }
+        }*/
     }
 }

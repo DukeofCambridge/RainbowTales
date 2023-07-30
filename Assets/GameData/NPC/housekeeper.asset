@@ -16,18 +16,16 @@ MonoBehaviour:
   - targetScene: 01.Mondstadt
     hour: 7
     minute: 0
-    day: 1
+    day: 0
     priority: 0
     season: 0
     targetGridPosition: {x: -1, y: -2}
-    clipAtStop: {fileID: 7400000, guid: db32c3897ab64466f86a8993b8e48f9e, type: 2}
     interactable: 1
   - targetScene: 00.Home
     hour: 19
     minute: 0
-    day: 1
+    day: 0
     priority: 0
     season: 0
     targetGridPosition: {x: 1, y: 0}
-    clipAtStop: {fileID: 7400000, guid: 54d560542c0284c169c56cddc7145ac6, type: 2}
     interactable: 1

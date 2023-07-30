@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Rainbow.Farming;
+using Rainbow.Inventory;
 using Rainbow.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,7 +18,7 @@ public class CursorManager : MonoBehaviour
     private bool _cursorEnable;
     private bool _cursorPosValid;
     //建造图标跟随
-    //private Image buildImage;
+    private Image _buildImage;
 
     //鼠标检测
     private Camera mainCamera;
@@ -45,6 +46,9 @@ public class CursorManager : MonoBehaviour
     {
         _cursorCanvas = GameObject.FindGameObjectWithTag("MaskCanvas").GetComponent<RectTransform>();
         _cursorImage = _cursorCanvas.GetChild(0).GetComponent<Image>();
+
+        _buildImage = _cursorCanvas.GetChild(1).GetComponent<Image>();
+        _buildImage.gameObject.SetActive(false);
         _currentSprite = normal;
         SetCursorImage(normal);
         mainCamera = Camera.main;
@@ -65,7 +69,7 @@ public class CursorManager : MonoBehaviour
         else
         {
             SetCursorImage(normal);
-            //buildImage.gameObject.SetActive(false);
+            _buildImage.gameObject.SetActive(false);
         }
     }
 
@@ -108,6 +112,7 @@ public class CursorManager : MonoBehaviour
             currentItem = null;
             _cursorEnable = false;
             _currentSprite = normal;
+            _buildImage.gameObject.SetActive(false);
         }
         else    //物品被选中才切换图片
         {
@@ -128,6 +133,16 @@ public class CursorManager : MonoBehaviour
                 _ => normal,
             };
             _cursorEnable = true;
+            if (itemDetails.itemType == ItemType.Furniture)
+            {
+                _buildImage.gameObject.SetActive(true);
+                _buildImage.sprite = itemDetails.itemOnWorldSprite;
+                _buildImage.SetNativeSize();
+            }
+            else
+            {
+                _buildImage.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -154,7 +169,7 @@ public class CursorManager : MonoBehaviour
         var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
         //Debug.Log(mouseGridPos);
         //建造图片跟随移动
-        //buildImage.rectTransform.position = Input.mousePosition;
+        _buildImage.rectTransform.position = Input.mousePosition;
 
         //判断是否不在玩家使用范围内
         if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadius || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadius)
@@ -205,16 +220,18 @@ public class CursorManager : MonoBehaviour
                     break;
                 /*case ItemType.ReapTool:
                     if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
-                    break;
+                    break;*/
                 case ItemType.Furniture:
-                    buildImage.gameObject.SetActive(true);
+                    _buildImage.gameObject.SetActive(true);
                     var bluePrintDetails = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(currentItem.itemID);
 
-                    if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
+                    //if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
+                    //    SetCursorValid();
+                    if (currentTile.canDropItem && InventoryManager.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
                         SetCursorValid();
                     else
                         SetCursorInValid();
-                    break;*/
+                    break;
             }
         }
         else
@@ -222,15 +239,27 @@ public class CursorManager : MonoBehaviour
             SetCursorInValid();
         }
     }
+    private bool HaveFurnitureInRadius(BluePrintDetails bluePrintDetails)
+    {
+        var buildItem = bluePrintDetails.buildPrefab;
+        Vector2 point = mouseWorldPos;
+        var size = buildItem.GetComponent<BoxCollider2D>().size;
 
+        var otherColl = Physics2D.OverlapBox(point, size, 0);
+        if (otherColl != null)
+            return otherColl.GetComponent<Furniture>();
+        return false;
+    }
     private void SetCursorValid()
     {
         _cursorPosValid = true;
         _cursorImage.color = new Color(1, 1, 1, 1);
+        _buildImage.color = new Color(1, 1, 1, 0.5f);
     }
     private void SetCursorInValid()
     {
         _cursorPosValid = false;
         _cursorImage.color = new Color(1, 0, 0, 0.4f);
+        _buildImage.color = new Color(1, 0, 0, 0.5f);
     }
 }

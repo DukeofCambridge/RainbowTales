@@ -25,30 +25,30 @@ MonoBehaviour:
     itemAmount: 1
   - itemID: 1006
     itemAmount: 1
-  - itemID: 2001
-    itemAmount: 11
+  - itemID: 6002
+    itemAmount: 1
+  - itemID: 6001
+    itemAmount: 1
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 4003
+    itemAmount: 70
+  - itemID: 4004
+    itemAmount: 1
+  - itemID: 2003
+    itemAmount: 13
   - itemID: 2004
-    itemAmount: 10
+    itemAmount: 20
+  - itemID: 4001
+    itemAmount: 46
+  - itemID: 3012
+    itemAmount: 6
   - itemID: 4002
     itemAmount: 6
-  - itemID: 4001
-    itemAmount: 86
-  - itemID: 4003
-    itemAmount: 4
-  - itemID: 4004
-    itemAmount: 2
   - itemID: 3011
-    itemAmount: 23
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
-  - itemID: 0
-    itemAmount: 0
+    itemAmount: 22
   - itemID: 0
     itemAmount: 0
   - itemID: 0

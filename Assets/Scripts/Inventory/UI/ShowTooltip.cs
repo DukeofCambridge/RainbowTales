@@ -26,6 +26,15 @@ namespace Rainbow.Inventory
                 //set the generation position of the tooltip with regard to the cursor
                 InventoryUI.itemTooltip.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0);
                 InventoryUI.itemTooltip.transform.position = transform.position + Vector3.up * 40;
+                if (_slotUI.itemDetails.itemType == ItemType.Furniture)
+                {
+                    InventoryUI.itemTooltip.resourcePanel.SetActive(true);
+                    InventoryUI.itemTooltip.SetupResourcePanel(_slotUI.itemDetails.itemID);
+                }
+                else
+                {
+                    InventoryUI.itemTooltip.resourcePanel.SetActive(false);
+                }
             }
             else
             {

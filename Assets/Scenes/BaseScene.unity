@@ -1120,6 +1120,7 @@ MonoBehaviour:
   itemDataListSo: {fileID: 11400000, guid: 6f0b2ae0defd4b94cbe4383c4516070c, type: 2}
   playerBag: {fileID: 11400000, guid: 2a827559e11a2674880ba381634050de, type: 2}
   playerMoney: 0
+  bluePrintData: {fileID: 11400000, guid: c1c7a8760cb1c5049a7ee2f270d325de, type: 2}
 --- !u!4 &1277999977
 Transform:
   m_ObjectHideFlags: 0
@@ -1555,8 +1556,8 @@ MonoBehaviour:
     startScene: 00.Home
     position: {x: 1, y: 0, z: 0}
   - npc: {fileID: 5823024872904420915}
-    startScene: 01.Mondstadt
-    position: {x: -10, y: -1, z: 0}
+    startScene: 00.Home
+    position: {x: 1, y: -5, z: 0}
 --- !u!114 &1465730748
 MonoBehaviour:
   m_ObjectHideFlags: 0

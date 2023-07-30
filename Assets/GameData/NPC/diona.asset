@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: diona
   m_EditorClassIdentifier: 
   scheduleList:
+  - targetScene: 01.Mondstadt
+    hour: 7
+    minute: 0
+    day: 0
+    priority: 0
+    season: 0
+    targetGridPosition: {x: -17, y: -1}
+    interactable: 1
   - targetScene: 00.Home
     hour: 19
     minute: 0
-    day: 1
+    day: 0
     priority: 0
     season: 0
     targetGridPosition: {x: 1, y: -5}
-    clipAtStop: {fileID: 0}
     interactable: 1

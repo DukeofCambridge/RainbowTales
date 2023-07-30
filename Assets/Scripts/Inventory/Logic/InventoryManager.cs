@@ -16,6 +16,11 @@ namespace Rainbow.Inventory
         private InventoryBag_SO _currentBoxBag;
         [Header("交易")]
         public int playerMoney;
+        [Header("建造蓝图")]
+        public BluePrintDataList_SO bluePrintData;
+        [Header("箱子数据")]
+        private Dictionary<string, List<InventoryItem>> boxDataDict = new Dictionary<string, List<InventoryItem>>();
+        public int BoxDataAmount => boxDataDict.Count;
         private void Start()
         {
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
@@ -25,14 +30,30 @@ namespace Rainbow.Inventory
         {
             EventHandler.DropItemEvent += OnDropItemEvent;
             EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
+            EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
+            EventHandler.BaseBagOpenEvent += OnBaseBagOpenEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
+            EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
+            EventHandler.BaseBagOpenEvent -= OnBaseBagOpenEvent;
         }
-
+        private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bag_SO)
+        {
+            _currentBoxBag = bag_SO;
+        }
+        private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
+        {
+            //RemoveItem(ID, 1);
+            BluePrintDetails bluePrint = bluePrintData.GetBluePrintDetails(ID);
+            foreach (var item in bluePrint.resourceItem)
+            {
+                RemoveItem(item.itemID, item.itemAmount);
+            }
+        }
         private void OnDropItemEvent(int arg1, Vector3 arg2, ItemType arg3)
         {
             RemoveItem(arg1,1);
@@ -151,7 +172,7 @@ namespace Rainbow.Inventory
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
         /// <summary>
-        /// 跨背包交换数据
+        /// swap items between different bags
         /// </summary>
         /// <param name="locationFrom"></param>
         /// <param name="fromIndex"></param>
@@ -270,6 +291,48 @@ namespace Rainbow.Inventory
             }
             //刷新UI
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
+        }
+        /// <summary>
+        /// 检查建造资源物品库存
+        /// </summary>
+        /// <param name="ID">图纸ID</param>
+        /// <returns></returns>
+        public bool CheckStock(int ID)
+        {
+            var bluePrintDetails = bluePrintData.GetBluePrintDetails(ID);
+
+            foreach (var resourceItem in bluePrintDetails.resourceItem)
+            {
+                var itemStock = playerBag.GetInventoryItem(resourceItem.itemID);
+                if (itemStock.itemAmount >= resourceItem.itemAmount)
+                {
+                    continue;
+                }
+                else return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// 查找箱子数据
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<InventoryItem> GetBoxDataList(string key)
+        {
+            if (boxDataDict.ContainsKey(key))
+                return boxDataDict[key];
+            return null;
+        }
+        /// <summary>
+        /// 加入箱子数据字典
+        /// </summary>
+        /// <param name="box"></param>
+        public void AddBoxDataDict(Box box)
+        {
+            var key = box.name + box.index;
+            if (!boxDataDict.ContainsKey(key))
+                boxDataDict.Add(key, box.boxBagData.itemsofInventory);
+            Debug.Log(key);
         }
     }
 }
