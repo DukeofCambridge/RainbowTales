@@ -11,6 +11,8 @@ public class TimeManager : Singleton<TimeManager>
 
     public bool gameClockPause=false;
     private float tikTime;
+    //灯光时间差
+    private float timeDifference;
 
     public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
     protected override void Awake()
@@ -45,6 +47,7 @@ public class TimeManager : Singleton<TimeManager>
     {
         EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
     }
 
     private void Update()
@@ -79,7 +82,7 @@ public class TimeManager : Singleton<TimeManager>
     private void NewGameTime()
     {
         gameSecond = 0;
-        gameMinute = 0;
+        gameMinute = 55;
         gameHour = 6;
         gameDay = 1;
         gameMonth = 3;
@@ -140,8 +143,39 @@ public class TimeManager : Singleton<TimeManager>
                 EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
             EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+            EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
         }
 
         // Debug.Log("Second: " + gameSecond + " Minute: " + gameMinute);
+    }
+    /// <summary>
+    /// 返回lightshift同时计算时间差
+    /// </summary>
+    /// <returns></returns>
+    private LightShift GetCurrentLightShift()
+    {
+        if (GameTime >= Settings.dawnTime && GameTime < Settings.morningTime)
+        {
+            timeDifference = (float)(GameTime - Settings.dawnTime).TotalMinutes;
+            return LightShift.Dawn;
+        }
+        if (GameTime >= Settings.morningTime && GameTime < Settings.duskTime)
+        {
+            timeDifference = (float)(GameTime - Settings.morningTime).TotalMinutes;
+            return LightShift.Morning;
+        }
+        if (GameTime >= Settings.duskTime && GameTime < Settings.nightTime)
+        {
+            timeDifference = (float)(GameTime - Settings.duskTime).TotalMinutes;
+            return LightShift.Dusk;
+        }
+        if (GameTime < Settings.dawnTime || GameTime >= Settings.nightTime)
+        {
+            timeDifference = Mathf.Abs((float)(GameTime - Settings.nightTime).TotalMinutes);
+            // Debug.Log(timeDifference);
+            return LightShift.Night;
+        }
+
+        return LightShift.Morning;
     }
 }

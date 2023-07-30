@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,9 +31,11 @@ public class Settings
     public const int MaxGridSize = 999;
 
     //灯光
-    public const float lightChangeDuration = 25f;
-    //public static TimeSpan morningTime = new TimeSpan(5, 0, 0);
-    //public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
+    public const float lightChangeDuration = 30f;
+    public static TimeSpan dawnTime = new TimeSpan(5, 0, 0);
+    public static TimeSpan morningTime = new TimeSpan(7, 0, 0);
+    public static TimeSpan duskTime = new TimeSpan(17, 0, 0);
+    public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
 
     public static Vector3 playerStartPos = new Vector3(-1.7f, -5f, 0);
     public const int playerStartMoney = 100;

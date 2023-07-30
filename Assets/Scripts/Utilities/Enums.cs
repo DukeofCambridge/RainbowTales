@@ -47,7 +47,7 @@ public enum GameState
 
 public enum LightShift
 {
-    Morning, Night
+    Dawn, Morning, Dusk, Night
 }
 
 public enum SoundName
