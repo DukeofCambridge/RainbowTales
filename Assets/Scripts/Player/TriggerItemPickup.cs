@@ -17,6 +17,7 @@ namespace Rainbow.Player
                 if (item.itemDetails.canPickedup)
                 {
                     InventoryManager.Instance.AddItem(item, true);
+                    EventHandler.CallPlaySoundEvent(SoundName.Pickup);
                 }
             }
         }

@@ -12,13 +12,13 @@ public class ObjectPoolManager : MonoBehaviour
     private void OnEnable()
     {
         EventHandler.ParticleEffectEvent += OnParticleEffectEvent;
-        //EventHandler.InitSoundEffect += InitSoundEffect;
+        EventHandler.InitSoundEffect += InitSoundEffect;
     }
 
     private void OnDisable()
     {
         EventHandler.ParticleEffectEvent -= OnParticleEffectEvent;
-        //EventHandler.InitSoundEffect -= InitSoundEffect;
+        EventHandler.InitSoundEffect -= InitSoundEffect;
     }
 
 
@@ -105,18 +105,19 @@ public class ObjectPoolManager : MonoBehaviour
 
     private GameObject GetPoolObject()
     {
+        //if the current objects in pool still don't meet demands then create more
         if (soundQueue.Count < 2)
             CreateSoundPool();
         return soundQueue.Dequeue();
     }
 
-    /*private void InitSoundEffect(SoundDetails soundDetails)
+    private void InitSoundEffect(SoundDetails soundDetails)
     {
         var obj = GetPoolObject();
         obj.GetComponent<Sound>().SetSound(soundDetails);
         obj.SetActive(true);
         StartCoroutine(DisableSound(obj, soundDetails.soundClip.length));
-    }*/
+    }
 
     private IEnumerator DisableSound(GameObject obj, float duration)
     {

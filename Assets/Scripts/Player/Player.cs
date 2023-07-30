@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
     private Vector2 _moveInput;
     private Animator[] _animators;
     private bool _isMoving;
-    private bool _isRunning = true;
+    public bool isRunning = true;
     private bool _isDisabled;
     //tool animation control
     private float _mouseX;
@@ -149,7 +150,7 @@ public class Player : MonoBehaviour
             _inputY *= 0.71f;
         }
 
-        if (!_isRunning)
+        if (!isRunning)
         {
             _inputX *= 0.5f;
             _inputY *= 0.5f;
@@ -182,7 +183,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
         {
-            _isRunning = !_isRunning;
+            isRunning = !isRunning;
         }
     }
 }

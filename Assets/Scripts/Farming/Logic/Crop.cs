@@ -40,10 +40,10 @@ public class Crop : MonoBehaviour
             if (cropDetails.hasParticalEffect)
                 EventHandler.CallParticleEffectEvent(cropDetails.effectType, transform.position + cropDetails.effectPos);
             //播放声音
-            /*if (cropDetails.soundEffect != SoundName.none)
+            if (cropDetails.soundEffect != SoundName.none)
             {
                 EventHandler.CallPlaySoundEvent(cropDetails.soundEffect);
-            }*/
+            }
         }
 
         if (harvestActionCount >= requireActionCount)

@@ -126,7 +126,7 @@ namespace Rainbow.Map
                     case ItemType.Seed:
                         EventHandler.CallPlantSeedEvent(itemDetails.itemID, currentTile);
                         EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos, itemDetails.itemType);
-                        //EventHandler.CallPlaySoundEvent(SoundName.Plant);
+                        EventHandler.CallPlaySoundEvent(SoundName.Plant);
                         break;
                     case ItemType.Commodity:
                         EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos, itemDetails.itemType);
@@ -137,13 +137,13 @@ namespace Rainbow.Map
                         currentTile.canDig = false;
                         currentTile.canDropItem = false;
                         //音效
-                        //EventHandler.CallPlaySoundEvent(SoundName.Hoe);
+                        EventHandler.CallPlaySoundEvent(SoundName.Hoe);
                         break;
                     case ItemType.WaterTool:
                         SetWaterGround(currentTile);
                         currentTile.daysSinceWatered = 0;
                         //音效
-                        //EventHandler.CallPlaySoundEvent(SoundName.Water);
+                        EventHandler.CallPlaySoundEvent(SoundName.Water);
                         break;
                     case ItemType.BreakTool:
                     case ItemType.ReapTool:
@@ -153,7 +153,7 @@ namespace Rainbow.Map
                         break;
                     case ItemType.CollectTool:
                         currentCrop.ProcessToolAction(itemDetails, currentTile);
-                        EventHandler.CallPlaySoundEvent(SoundName.Basket);
+                        //EventHandler.CallPlaySoundEvent(SoundName.Basket);
                         break;
                     /*case ItemType.ReapTool:
                         var reapCount = 0;

@@ -159,11 +159,11 @@ public static class EventHandler
     }
 
     //音效
-    /*public static event Action<SoundDetails> InitSoundEffect;
+    public static event Action<SoundDetails> InitSoundEffect;
     public static void CallInitSoundEffect(SoundDetails soundDetails)
     {
         InitSoundEffect?.Invoke(soundDetails);
-    }*/
+    }
 
     public static event Action<SoundName> PlaySoundEvent;
     public static void CallPlaySoundEvent(SoundName soundName)
