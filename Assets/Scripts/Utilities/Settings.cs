@@ -37,6 +37,6 @@ public class Settings
     public static TimeSpan duskTime = new TimeSpan(17, 0, 0);
     public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
 
-    public static Vector3 playerStartPos = new Vector3(-1.7f, -5f, 0);
+    public static Vector3 playerStartPos = new Vector3(-24.5f, -17.6f, 0);
     public const int playerStartMoney = 100;
 }

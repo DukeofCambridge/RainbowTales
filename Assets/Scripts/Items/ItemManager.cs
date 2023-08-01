@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Rainbow.Inventory;
+using Rainbow.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
 namespace Rainbow.Items
 {
-    public class ItemManager : MonoBehaviour
+    public class ItemManager : MonoBehaviour, ISaveable
     {
         //a template item, it will be a real item only after the method 'Init(id)' is called
         public Item itemPrefab;
@@ -19,6 +20,7 @@ namespace Rainbow.Items
         private Dictionary<string, List<SceneItem>> _sceneItemDict = new Dictionary<string, List<SceneItem>>();
         //记录场景家具
         private Dictionary<string, List<SceneFurniture>> _sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
+        public string GUID => GetComponent<DataGUID>().guid;
         private void OnEnable()
         {
             EventHandler.InstantiateItemInScene += OnInstantiateItemInScene;
@@ -26,6 +28,7 @@ namespace Rainbow.Items
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
             EventHandler.DropItemEvent += OnDropItemEvent;
             EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
         private void OnDisable()
         {
@@ -34,8 +37,18 @@ namespace Rainbow.Items
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
-
+        private void Start()
+        {        
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+        }
+        private void OnStartNewGameEvent(int obj)
+        {
+            _sceneItemDict.Clear();
+            _sceneFurnitureDict.Clear();
+        }
         private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
         {
             BluePrintDetails bluePrint = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(ID);
@@ -169,6 +182,26 @@ namespace Rainbow.Items
                     }
                 }
             }
+        }
+        public GameSaveData GenerateSaveData()
+        {
+            GetAllSceneItems();
+            GetAllSceneFurniture();
+
+            GameSaveData saveData = new GameSaveData();
+            saveData.sceneItemDict = _sceneItemDict;
+            saveData.sceneFurnitureDict = _sceneFurnitureDict;
+
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            _sceneItemDict = saveData.sceneItemDict;
+            _sceneFurnitureDict = saveData.sceneFurnitureDict;
+
+            RecreateAllItems();
+            RebuildFurniture();
         }
     }
 }

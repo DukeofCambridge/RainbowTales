@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Rainbow.Items;
+using Rainbow.Save;
 using UnityEngine;
 
 namespace Rainbow.Inventory
 {
     //TODO: Infinite scrolling backpack
-    public class InventoryManager : Singleton<InventoryManager>
+    public class InventoryManager : Singleton<InventoryManager>,ISaveable
     {
         [Header("物品数据")]
         public ItemDataList_SO itemDataListSo;
         [Header("背包数据")]
+        public InventoryBag_SO playerBagTemp;
         public InventoryBag_SO playerBag;
         private InventoryBag_SO _currentBoxBag;
         [Header("交易")]
@@ -21,10 +23,7 @@ namespace Rainbow.Inventory
         [Header("箱子数据")]
         private Dictionary<string, List<InventoryItem>> boxDataDict = new Dictionary<string, List<InventoryItem>>();
         public int BoxDataAmount => boxDataDict.Count;
-        private void Start()
-        {
-            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
-        }
+        public string GUID => GetComponent<DataGUID>().guid;
 
         private void OnEnable()
         {
@@ -32,6 +31,7 @@ namespace Rainbow.Inventory
             EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
             EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent += OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
 
         private void OnDisable()
@@ -40,6 +40,20 @@ namespace Rainbow.Inventory
             EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent -= OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+        }
+        private void Start()
+        {        
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+            //EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
+        }
+        private void OnStartNewGameEvent(int obj)
+        {
+            playerBag = Instantiate(playerBagTemp);
+            playerMoney = Settings.playerStartMoney;
+            boxDataDict.Clear();
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
         private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bag_SO)
         {
@@ -333,6 +347,37 @@ namespace Rainbow.Inventory
             if (!boxDataDict.ContainsKey(key))
                 boxDataDict.Add(key, box.boxBagData.itemsofInventory);
             Debug.Log(key);
+        }
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.playerMoney = this.playerMoney;
+
+            saveData.inventoryDict = new Dictionary<string, List<InventoryItem>>();
+            saveData.inventoryDict.Add(playerBag.name, playerBag.itemsofInventory);
+
+            foreach (var item in boxDataDict)
+            {
+                saveData.inventoryDict.Add(item.Key, item.Value);
+            }
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            playerMoney = saveData.playerMoney;
+            playerBag = Instantiate(playerBagTemp);
+            playerBag.itemsofInventory = saveData.inventoryDict[playerBag.name];
+
+            foreach (var item in saveData.inventoryDict)
+            {
+                if (boxDataDict.ContainsKey(item.Key))
+                {
+                    boxDataDict[item.Key] = item.Value;
+                }
+            }
+
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemsofInventory);
         }
     }
 }

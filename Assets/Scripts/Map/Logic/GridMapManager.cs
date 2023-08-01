@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Rainbow.Farming;
+using Rainbow.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace Rainbow.Map
 {
-    public class GridMapManager : Singleton<GridMapManager>
+    public class GridMapManager : Singleton<GridMapManager>, ISaveable
     {
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
@@ -29,10 +30,12 @@ namespace Rainbow.Map
         private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();
         
         //杂草列表
-        private List<ReapItem> itemsInRadius;
-        
+        //private List<ReapItem> itemsInRadius;
+        public string GUID => GetComponent<DataGUID>().guid;
         private void Start()
         {
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
             foreach (var mapData in mapDataList)
             {
                 firstLoadDict.Add(mapData.sceneName, true);
@@ -198,7 +201,7 @@ namespace Rainbow.Map
             }
             return currentCrop;
         }
-        /// <summary>
+        /*/// <summary>
         /// 返回工具范围内的杂草
         /// </summary>
         /// <param name="tool">物品信息</param>
@@ -226,7 +229,7 @@ namespace Rainbow.Map
                 }
             }
             return itemsInRadius.Count > 0;
-        }
+        }*/
         /// <summary>
         /// 根据地图信息生成字典
         /// </summary>
@@ -388,6 +391,19 @@ namespace Rainbow.Map
                 }
             }
             return false;
+        }
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.tileDetailsDict = tileDetailsDict;
+            saveData.firstLoadDict = firstLoadDict;
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            tileDetailsDict = saveData.tileDetailsDict;
+            firstLoadDict = saveData.firstLoadDict;
         }
     }
 }

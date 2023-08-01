@@ -41,7 +41,7 @@ namespace Rainbow.AStar
             if (moveNPC)
             {
                 moveNPC = false;
-                var schedule = new ScheduleDetails(0, 0, 0, 0, Season.Spring, targetScene, targetPos, stopClip, true);
+                var schedule = new ScheduleDetails(0, 0, 0, 0, Season.Spring, targetScene, targetPos, true);
                 npcMovement.BuildPath(schedule);
             }
         }

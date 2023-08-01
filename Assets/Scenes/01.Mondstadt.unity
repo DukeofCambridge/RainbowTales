@@ -8002,7 +8002,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061123288}
   - component: {fileID: 1061123287}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bounds
   m_TagString: BoundConfiner
   m_Icon: {fileID: 0}

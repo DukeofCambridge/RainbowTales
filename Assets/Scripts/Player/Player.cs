@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Rainbow.Save;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISaveable
 {
     private Rigidbody2D _rb;
 
@@ -23,11 +24,12 @@ public class Player : MonoBehaviour
     private float _mouseY;
     private bool _useTool;
 
-    //public string GUID => GetComponent<DataGUID>().guid;
+    public string GUID => GetComponent<DataGUID>().guid;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _animators = GetComponentsInChildren<Animator>();
+        _isDisabled = true;
     }
 
     private void Update()
@@ -59,6 +61,8 @@ public class Player : MonoBehaviour
         EventHandler.MoveToPosition += OnMoveToPosition;
         EventHandler.MouseClickedEvent += OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        EventHandler.EndGameEvent += OnEndGameEvent;
     }
 
     private void OnDisable()
@@ -68,7 +72,16 @@ public class Player : MonoBehaviour
         EventHandler.MoveToPosition -= OnMoveToPosition;
         EventHandler.MouseClickedEvent -= OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+        EventHandler.EndGameEvent -= OnEndGameEvent;
     }
+
+    private void Start()
+    {
+        ISaveable saveable = this;
+        saveable.RegisterSaveable();
+    }
+
     private void OnUpdateGameStateEvent(GameState gameState)
     {
         switch (gameState)
@@ -80,6 +93,16 @@ public class Player : MonoBehaviour
                 _isDisabled = true;
                 break;
         }
+    }
+    private void OnStartNewGameEvent(int obj)
+    {
+        _isDisabled = false;
+        transform.position = Settings.playerStartPos;
+    }
+
+    private void OnEndGameEvent()
+    {
+        _isDisabled = true;
     }
     private void OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
     {
@@ -185,5 +208,21 @@ public class Player : MonoBehaviour
         {
             isRunning = !isRunning;
         }
+    }
+    
+    public GameSaveData GenerateSaveData()
+    {
+        GameSaveData saveData = new GameSaveData();
+        saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
+        saveData.characterPosDict.Add(this.name, new SerializableVector3(transform.position));
+
+        return saveData;
+    }
+
+    public void RestoreData(GameSaveData saveData)
+    {
+        var targetPosition = saveData.characterPosDict[this.name].ToVector3();
+
+        transform.position = targetPosition;
     }
 }

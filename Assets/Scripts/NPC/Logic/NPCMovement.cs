@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Rainbow.AStar;
+using Rainbow.Save;
 //using Rainbow.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-public class NPCMovement : MonoBehaviour//, ISaveable
+public class NPCMovement : MonoBehaviour, ISaveable
 {
     public ScheduleDataList_SO scheduleData;
     private SortedSet<ScheduleDetails> scheduleSet;
@@ -44,7 +45,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
     private bool npcMove;
     private bool sceneLoaded;
     public bool interactable;
-    //public bool isFirstLoad;
+    public bool isFirstLoad;
     private Season currentSeason;
     //动画计时器
     private float animationBreakTime;
@@ -55,7 +56,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
 
     private TimeSpan GameTime => TimeManager.Instance.GameTime;
 
-    //public string GUID => GetComponent<DataGUID>().guid;
+    public string GUID => GetComponent<DataGUID>().guid;
 
     private void Awake()
     {
@@ -100,8 +101,8 @@ public class NPCMovement : MonoBehaviour//, ISaveable
 
     private void Start()
     {
-        /*ISaveable saveable = this;
-        saveable.RegisterSaveable();*/
+        ISaveable saveable = this;
+        saveable.RegisterSaveable();
     }
 
     private void Update()
@@ -130,7 +131,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
     private void OnStartNewGameEvent(int obj)
     {
         isInitialised = false;
-        //isFirstLoad = true;
+        isFirstLoad = true;
     }
 
     private void OnGameMinuteEvent(int minute, int hour, int day, Season season)
@@ -177,13 +178,13 @@ public class NPCMovement : MonoBehaviour//, ISaveable
 
         sceneLoaded = true;
 
-        /*if (!isFirstLoad)
+        if (!isFirstLoad)
         {
             currentGridPosition = grid.WorldToCell(transform.position);
-            var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, targetScene, (Vector2Int)_targetGridPosition, stopAnimationClip, interactable);
+            var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, targetScene, (Vector2Int)_targetGridPosition, interactable);
             BuildPath(schedule);
             isFirstLoad = true;
-        }*/
+        }
     }
 
     private void CheckVisiable()
@@ -286,7 +287,7 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         targetScene = schedule.targetScene;
         _targetGridPosition = (Vector3Int)schedule.targetGridPosition;
         //stopAnimationClip = schedule.clipAtStop;
-        this.interactable = schedule.interactable;
+        interactable = schedule.interactable;
         //AStar generates the coordinate sequence in the path, then the method UpdateTimeOnPath() add a timestamp for every coordinate
         if (schedule.targetScene == currentScene)
         {
@@ -453,18 +454,18 @@ public class NPCMovement : MonoBehaviour//, ISaveable
     }
     #endregion
 
-    /*public GameSaveData GenerateSaveData()
+    public GameSaveData GenerateSaveData()
     {
         GameSaveData saveData = new GameSaveData();
         saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
-        saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(tragetGridPosition));
+        saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(_targetGridPosition));
         saveData.characterPosDict.Add("currentPosition", new SerializableVector3(transform.position));
         saveData.dataSceneName = currentScene;
-        saveData.targetScene = this.targetScene;
-        if (stopAnimationClip != null)
+        saveData.targetScene = targetScene;
+        /*if (stopAnimationClip != null)
         {
             saveData.animationInstanceID = stopAnimationClip.GetInstanceID();
-        }
+        }*/
         saveData.interactable = this.interactable;
         saveData.timeDict = new Dictionary<string, int>();
         saveData.timeDict.Add("currentSeason", (int)currentSeason);
@@ -483,15 +484,15 @@ public class NPCMovement : MonoBehaviour//, ISaveable
         Vector3Int gridPos = (Vector3Int)saveData.characterPosDict["targetGridPosition"].ToVector2Int();
 
         transform.position = pos;
-        tragetGridPosition = gridPos;
+        _targetGridPosition = gridPos;
 
-        if (saveData.animationInstanceID != 0)
+        /*if (saveData.animationInstanceID != 0)
         {
             this.stopAnimationClip = Resources.InstanceIDToObject(saveData.animationInstanceID) as AnimationClip;
-        }
+        }*/
 
-        this.interactable = saveData.interactable;
-        this.currentSeason = (Season)saveData.timeDict["currentSeason"];
-    }*/
+        interactable = saveData.interactable;
+        currentSeason = (Season)saveData.timeDict["currentSeason"];
+    }
 
 }

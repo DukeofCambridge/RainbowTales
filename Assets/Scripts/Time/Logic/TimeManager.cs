@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Rainbow.Save;
 using UnityEngine;
 
-public class TimeManager : Singleton<TimeManager>
+public class TimeManager : Singleton<TimeManager>, ISaveable
 {
     private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
     private Season gameSeason = Season.Spring;
@@ -13,24 +14,25 @@ public class TimeManager : Singleton<TimeManager>
     private float tikTime;
     //灯光时间差
     private float timeDifference;
-
+    public string GUID => GetComponent<DataGUID>().guid;
     public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
-    protected override void Awake()
-    {
-        base.Awake();
-        NewGameTime();
-    }
 
     private void OnEnable()
     {
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        EventHandler.EndGameEvent += OnEndGameEvent;
+        EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+        EventHandler.EndGameEvent -= OnEndGameEvent;
+        EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
     }
 
     private void OnBeforeSceneUnloadEvent()
@@ -45,9 +47,12 @@ public class TimeManager : Singleton<TimeManager>
 
     private void Start()  //Start() is called after OnEnable()
     {
-        EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        ISaveable saveable = this;
+        saveable.RegisterSaveable();
+        gameClockPause = true;
+        /*EventHandler.CallGameHourEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
-        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
+        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);*/
     }
 
     private void Update()
@@ -78,7 +83,15 @@ public class TimeManager : Singleton<TimeManager>
             EventHandler.CallGameDayEvent(gameDay, gameSeason);
         }
     }
-
+    private void OnEndGameEvent()
+    {
+        gameClockPause = true;
+    }
+    private void OnStartNewGameEvent(int obj)
+    {
+        NewGameTime();
+        // gameClockPause = false;
+    }
     private void NewGameTime()
     {
         gameSecond = 0;
@@ -89,7 +102,10 @@ public class TimeManager : Singleton<TimeManager>
         gameYear = 845;
         gameSeason = Season.Spring;
     }
-
+    private void OnUpdateGameStateEvent(GameState gameState)
+    {
+        gameClockPause = gameState == GameState.Pause;
+    }
     private void UpdateGameTime()
     {
         gameSecond++;
@@ -177,5 +193,30 @@ public class TimeManager : Singleton<TimeManager>
         }
 
         return LightShift.Morning;
+    }
+    public GameSaveData GenerateSaveData()
+    {
+        GameSaveData saveData = new GameSaveData();
+        saveData.timeDict = new Dictionary<string, int>();
+        saveData.timeDict.Add("gameYear", gameYear);
+        saveData.timeDict.Add("gameSeason", (int)gameSeason);
+        saveData.timeDict.Add("gameMonth", gameMonth);
+        saveData.timeDict.Add("gameDay", gameDay);
+        saveData.timeDict.Add("gameHour", gameHour);
+        saveData.timeDict.Add("gameMinute", gameMinute);
+        saveData.timeDict.Add("gameSecond", gameSecond);
+
+        return saveData;
+    }
+
+    public void RestoreData(GameSaveData saveData)
+    {
+        gameYear = saveData.timeDict["gameYear"];
+        gameSeason = (Season)saveData.timeDict["gameSeason"];
+        gameMonth = saveData.timeDict["gameMonth"];
+        gameDay = saveData.timeDict["gameDay"];
+        gameHour = saveData.timeDict["gameHour"];
+        gameMinute = saveData.timeDict["gameMinute"];
+        gameSecond = saveData.timeDict["gameSecond"];
     }
 }
