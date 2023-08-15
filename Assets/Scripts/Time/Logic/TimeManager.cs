@@ -10,7 +10,7 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
     private Season gameSeason = Season.Spring;
     private int monthInSeason = 3;
 
-    public bool gameClockPause=false;
+    public bool gameClockPause=true;
     private float tikTime;
     //灯光时间差
     private float timeDifference;
@@ -90,12 +90,12 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
     private void OnStartNewGameEvent(int obj)
     {
         NewGameTime();
-        // gameClockPause = false;
+        gameClockPause = false;
     }
     private void NewGameTime()
     {
         gameSecond = 0;
-        gameMinute = 55;
+        gameMinute = 28;
         gameHour = 6;
         gameDay = 1;
         gameMonth = 3;

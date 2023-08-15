@@ -26,12 +26,26 @@ namespace Rainbow.Save
         {
             EventHandler.StartNewGameEvent += OnStartNewGameEvent;
             EventHandler.EndGameEvent += OnEndGameEvent;
+            EventHandler.GameHourEvent += OnGameHourEvent;
+            EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
             EventHandler.EndGameEvent -= OnEndGameEvent;
+            EventHandler.GameHourEvent -= OnGameHourEvent;
+            EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        }
+
+        private void OnBeforeSceneUnloadEvent()
+        {
+            Save(currentDataIndex);
+        }
+
+        private void OnGameHourEvent(int arg1, int arg2, int arg3, int arg4, Season arg5)
+        {
+            Save(currentDataIndex);
         }
 
 

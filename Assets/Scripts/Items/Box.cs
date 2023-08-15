@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Rainbow.Items;
 using UnityEngine;
 
 namespace Rainbow.Inventory
 {
+    // 注意，Box的prefab是有furniture组件的，因为建造box后需要在重新加载场景时刷新重建，但场景中一开始就有的Box是不需要furniture组件的！它们只需要一开始就加入box字典中
     public class Box : MonoBehaviour
     {
         public InventoryBag_SO boxBagTemplate;
@@ -21,6 +24,11 @@ namespace Rainbow.Inventory
             {
                 boxBagData = Instantiate(boxBagTemplate);
             }
+        }
+
+        private void Start()
+        {
+            InitBox(index);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -75,6 +83,7 @@ namespace Rainbow.Inventory
             var key = this.name + index;
             if (InventoryManager.Instance.GetBoxDataList(key) != null)  //刷新地图读取数据
             {
+                Debug.Log("拿到箱子数据"+key);
                 boxBagData.itemsofInventory = InventoryManager.Instance.GetBoxDataList(key);
             }
             else     //新建箱子

@@ -27,3 +27,12 @@ MonoBehaviour:
     - itemID: 3012
       itemAmount: 2
     buildPrefab: {fileID: 5172606552799434540, guid: d5d436ddd907a444ca69a73f1e298311, type: 3}
+  - ID: 6003
+    resourceItem:
+    - itemID: 4003
+      itemAmount: 5
+    - itemID: 3011
+      itemAmount: 2
+    - itemID: 3012
+      itemAmount: 2
+    buildPrefab: {fileID: 5172606552799434540, guid: d5d436ddd907a444ca69a73f1e298311, type: 3}

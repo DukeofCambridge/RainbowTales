@@ -82,6 +82,7 @@ public class DialogueUI : MonoBehaviour
             dialogueBox.SetActive(false);
             faceLeft.gameObject.SetActive(false);
             faceRight.gameObject.SetActive(false);
+            continueBox.gameObject.SetActive(false);
             yield break;
         }
     }

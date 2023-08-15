@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.Playables;
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -24,7 +25,7 @@ public class AudioManager : Singleton<AudioManager>
     public AudioMixerSnapshot muteSnapShot;
     private float musicTransitionSecond = 4f;
 
-
+    public PlayableDirector startDirector;
     public float MusicStartSecond => Random.Range(0, 1f);
 
     private void OnEnable()
@@ -32,6 +33,7 @@ public class AudioManager : Singleton<AudioManager>
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.PlaySoundEvent += OnPlaySoundEvent;
         EventHandler.EndGameEvent += OnEndGameEvent;
+        startDirector.stopped += PlayMusicAfterDirector;
     }
 
     private void OnDisable()
@@ -68,9 +70,25 @@ public class AudioManager : Singleton<AudioManager>
         //you could create a coroutine variable if you want to stop the specified one
         if (soundRoutine != null)
             StopCoroutine(soundRoutine);
-        soundRoutine = StartCoroutine(PlaySoundRoutine(music, ambient));
+        if (startDirector.state == PlayState.Paused)
+            soundRoutine = StartCoroutine(PlaySoundRoutine(music, ambient));
     }
 
+    private void PlayMusicAfterDirector(PlayableDirector director)
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        SceneSoundItem sceneSound = sceneSoundData.GetSceneSoundItem(currentScene);
+        if (sceneSound == null)
+            return;
+
+        SoundDetails ambient = soundDetailsData.GetSoundDetails(sceneSound.ambient);
+        SoundDetails music = soundDetailsData.GetSoundDetails(sceneSound.bgm);
+        //you could create a coroutine variable if you want to stop the specified one
+        if (soundRoutine != null)
+            StopCoroutine(soundRoutine);
+        soundRoutine = StartCoroutine(PlaySoundRoutine(music, ambient));
+    }
 
     private IEnumerator PlaySoundRoutine(SoundDetails music, SoundDetails ambient)
     {

@@ -174,8 +174,17 @@ namespace Rainbow.Inventory
             InventoryItem targetItem = playerBag.itemsofInventory[targetIndex];
             if (targetItem.itemID != 0)
             {
-                playerBag.itemsofInventory[fromIndex] = targetItem;
-                playerBag.itemsofInventory[targetIndex] = currentItem;
+                if (currentItem.itemID != targetItem.itemID)
+                {
+                    playerBag.itemsofInventory[fromIndex] = targetItem;
+                    playerBag.itemsofInventory[targetIndex] = currentItem;
+                }
+                else
+                {
+                    targetItem.itemAmount += currentItem.itemAmount;
+                    playerBag.itemsofInventory[targetIndex] = targetItem;
+                    playerBag.itemsofInventory[fromIndex] = new InventoryItem();
+                }
             }
             else
             {
@@ -346,7 +355,7 @@ namespace Rainbow.Inventory
             var key = box.name + box.index;
             if (!boxDataDict.ContainsKey(key))
                 boxDataDict.Add(key, box.boxBagData.itemsofInventory);
-            Debug.Log(key);
+            Debug.Log("加入箱子字典: "+key);
         }
         public GameSaveData GenerateSaveData()
         {

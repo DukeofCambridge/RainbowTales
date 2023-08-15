@@ -44,7 +44,10 @@ public class TimelineManager : Singleton<TimelineManager>
     private void OnStartNewGameEvent(int obj)
     {
         if (startDirector != null)
+        {
+            //Debug.Log("PLay Director!");
             startDirector.Play();
+        }
     }
 
     private void OnAfterSceneLoadedEvent()
